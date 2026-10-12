@@ -1,0 +1,14 @@
+# Private notes: never published (see CLAUDE.md integrity rules)
+CLAUDE.md
+START-PROMPT.md
+
+# Bulk download caches (re-fetchable from the revision IDs saved in data/processed)
+data/raw/wikipedia/
+data/raw/wikidata/
+
+.DS_Store
+__pycache__/
+*.pyc
+
+# Tool state from a Claude plugin
+.claude-flow/

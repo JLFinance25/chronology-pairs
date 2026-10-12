@@ -1,0 +1,231 @@
+{
+ "n_calls": 854,
+ "speed": {
+  "gpt-oss-20b-low list len20": {
+   "n": 2,
+   "median_s": 11.066,
+   "mean_s": 11.066,
+   "mean_output_tokens": 610.5
+  },
+  "gpt-oss-20b-low pair": {
+   "n": 20,
+   "median_s": 0.964,
+   "mean_s": 1.48,
+   "mean_output_tokens": 57.3
+  },
+  "qwen3-14b-nothink list len20": {
+   "n": 2,
+   "median_s": 9.319,
+   "mean_s": 9.319,
+   "mean_output_tokens": 220.5
+  },
+  "qwen3-14b-nothink pair": {
+   "n": 40,
+   "median_s": 0.225,
+   "mean_s": 0.349,
+   "mean_output_tokens": 2
+  },
+  "qwen3-8b-nothink list len10": {
+   "n": 12,
+   "median_s": 0.708,
+   "mean_s": 2.071,
+   "mean_output_tokens": 87.417
+  },
+  "qwen3-8b-nothink list len20": {
+   "n": 8,
+   "median_s": 8.901,
+   "mean_s": 8.023,
+   "mean_output_tokens": 358.75
+  },
+  "qwen3-8b-nothink list len5": {
+   "n": 16,
+   "median_s": 0.325,
+   "mean_s": 0.311,
+   "mean_output_tokens": 10.562
+  },
+  "qwen3-8b-nothink pair": {
+   "n": 725,
+   "median_s": 0.121,
+   "mean_s": 0.125,
+   "mean_output_tokens": 2
+  },
+  "qwen3-8b-nothink year": {
+   "n": 25,
+   "median_s": 0.178,
+   "mean_s": 0.18,
+   "mean_output_tokens": 5
+  },
+  "qwen3-8b-think list len10": {
+   "n": 2,
+   "median_s": 86.48,
+   "mean_s": 86.48,
+   "mean_output_tokens": 3452
+  },
+  "qwen3-8b-think list len20": {
+   "n": 2,
+   "median_s": 48.83,
+   "mean_s": 48.83,
+   "mean_output_tokens": 1994.5
+  }
+ },
+ "unreadable": {
+  "gpt-oss-20b-low list wording A": {
+   "n": 2,
+   "unreadable_or_invalid": 2,
+   "cut_off": 0
+  },
+  "gpt-oss-20b-low pair wording A": {
+   "n": 20,
+   "unreadable_or_invalid": 0,
+   "cut_off": 0
+  },
+  "qwen3-14b-nothink list wording A": {
+   "n": 2,
+   "unreadable_or_invalid": 1,
+   "cut_off": 1
+  },
+  "qwen3-14b-nothink pair wording A": {
+   "n": 40,
+   "unreadable_or_invalid": 0,
+   "cut_off": 0
+  },
+  "qwen3-8b-nothink list wording A": {
+   "n": 20,
+   "unreadable_or_invalid": 9,
+   "cut_off": 5
+  },
+  "qwen3-8b-nothink list wording B": {
+   "n": 16,
+   "unreadable_or_invalid": 8,
+   "cut_off": 4
+  },
+  "qwen3-8b-nothink pair wording A": {
+   "n": 625,
+   "unreadable_or_invalid": 0,
+   "cut_off": 0
+  },
+  "qwen3-8b-nothink pair wording B": {
+   "n": 100,
+   "unreadable_or_invalid": 0,
+   "cut_off": 0
+  },
+  "qwen3-8b-nothink year wording -": {
+   "n": 25,
+   "unreadable_or_invalid": 0,
+   "cut_off": 0
+  },
+  "qwen3-8b-think list wording A": {
+   "n": 4,
+   "unreadable_or_invalid": 2,
+   "cut_off": 0
+  }
+ },
+ "year_check": {
+  "n": 25,
+  "exact": 20,
+  "within_one_year": 21
+ },
+ "pairs_wording_A": {
+  "flip": 99,
+  "stable-right": 174,
+  "stable-wrong": 27
+ },
+ "wording_agreement_pairs": {
+  "agree": 92,
+  "n": 100
+ },
+ "repeatability": {
+  "same": 29,
+  "n": 29
+ },
+ "lists": {
+  "gpt-oss-20b-low wording A len20": {
+   "n": 2,
+   "valid": 0,
+   "exact": 0,
+   "mean_tau": null,
+   "mean_tau_vs_code_letters": null
+  },
+  "qwen3-14b-nothink wording A len20": {
+   "n": 2,
+   "valid": 1,
+   "exact": 0,
+   "mean_tau": 0.611,
+   "mean_tau_vs_code_letters": -0.011
+  },
+  "qwen3-8b-nothink wording A len10": {
+   "n": 6,
+   "valid": 3,
+   "exact": 0,
+   "mean_tau": 0.215,
+   "mean_tau_vs_code_letters": -0.274
+  },
+  "qwen3-8b-nothink wording A len20": {
+   "n": 4,
+   "valid": 0,
+   "exact": 0,
+   "mean_tau": null,
+   "mean_tau_vs_code_letters": null
+  },
+  "qwen3-8b-nothink wording A len5": {
+   "n": 6,
+   "valid": 5,
+   "exact": 0,
+   "mean_tau": 0.04,
+   "mean_tau_vs_code_letters": 0.04
+  },
+  "qwen3-8b-nothink wording B len10": {
+   "n": 6,
+   "valid": 2,
+   "exact": 0,
+   "mean_tau": 0.111,
+   "mean_tau_vs_code_letters": -0.133
+  },
+  "qwen3-8b-nothink wording B len20": {
+   "n": 4,
+   "valid": 0,
+   "exact": 0,
+   "mean_tau": null,
+   "mean_tau_vs_code_letters": null
+  },
+  "qwen3-8b-nothink wording B len5": {
+   "n": 6,
+   "valid": 6,
+   "exact": 0,
+   "mean_tau": -0.133,
+   "mean_tau_vs_code_letters": 0.0
+  },
+  "qwen3-8b-think wording A len10": {
+   "n": 2,
+   "valid": 2,
+   "exact": 1,
+   "mean_tau": 0.733,
+   "mean_tau_vs_code_letters": -0.133
+  },
+  "qwen3-8b-think wording A len20": {
+   "n": 2,
+   "valid": 0,
+   "exact": 0,
+   "mean_tau": null,
+   "mean_tau_vs_code_letters": null
+  }
+ },
+ "projection_hours": {
+  "qwen3-8b-nothink": {
+   "pairs": 0.48,
+   "years": 0.01,
+   "lists": 0.17
+  },
+  "qwen3-14b-nothink": {
+   "pairs": 0.89,
+   "lists": 0.62
+  },
+  "qwen3-8b-think": {
+   "lists": 4.2
+  },
+  "gpt-oss-20b-low": {
+   "pairs": 3.82,
+   "lists": 0.74
+  }
+ }
+}

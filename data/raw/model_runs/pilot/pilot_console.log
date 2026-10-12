@@ -1,0 +1,10 @@
+-> year questions, qwen3 8B
+-> pairs, wording A, both orders
+-> pairs, wording B
+-> pairs, repeat check
+-> lists, wording A and B
+-> lists, repeat check
+-> lists, thinking on
+-> speed, qwen3 14B
+-> speed, gpt-oss 20B low
+Pilot done. Calls saved in /Users/jaydenling/Documents/Research/chronology-pairs/data/raw/model_runs/pilot/pilot_calls.jsonl
