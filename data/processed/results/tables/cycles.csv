@@ -1,3 +1,4 @@
 setup,all_stable_triples,observed_circular,shuffle_mean,shuffle_lo,shuffle_hi,p_two_sided
 qwen3-8b-nothink,66393,14,3280.88,3012,3602,0.0
+qwen3-14b-nothink,188198,140,12423.73,11931,12961,0.0
 llama3.1-8b,27761,30,6015.43,5829,6199,0.0
