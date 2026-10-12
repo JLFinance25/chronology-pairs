@@ -12,6 +12,10 @@ from datetime import datetime, timezone
 import requests
 
 OLLAMA_CHAT = "http://localhost:11434/api/chat"
+# The Windows PC's Ollama, reached through an SSH tunnel:
+#   ssh -f -N -o ServerAliveInterval=15 -L 127.0.0.1:11500:127.0.0.1:11434 pc
+# Moved from port 11435 on Oct 12, 2026: that tunnel stopped passing traffic.
+PC_CHAT = "http://127.0.0.1:11500/api/chat"
 
 # Settings checked Oct 12, 2026 against the model pages and `ollama show`:
 #   Qwen3: thinking can be on or off; with thinking on, the model page says not to use greedy
@@ -27,6 +31,9 @@ CONFIGS = {
                                    "seed": 0, "num_ctx": 20480}},
     "gpt-oss-20b-low": {"model": "gpt-oss:20b", "think": "low",
                         "options": {"temperature": 0, "seed": 0, "num_ctx": 8192}},
+    # Added Oct 12 (PREREG.md Deviations). No thinking mode, so "think" is left out of the request.
+    "llama3.1-8b": {"model": "llama3.1:8b", "think": None, "host": "pc",
+                    "options": {"temperature": 0, "seed": 0, "num_ctx": 4096}},
 }
 
 # Longest reply allowed per task. A reply cut off at this limit counts as invalid.
@@ -42,21 +49,35 @@ def chat(config_name, prompt, task, logprobs=False):
     body = {
         "model": cfg["model"],
         "messages": [{"role": "user", "content": prompt}],
-        "think": cfg["think"],
         "stream": False,
         "options": options,
         "keep_alive": "30m",
     }
+    if cfg["think"] is not None:
+        body["think"] = cfg["think"]
+    url = PC_CHAT if cfg.get("host") == "pc" else OLLAMA_CHAT
     if logprobs:
         body["logprobs"] = True
         body["top_logprobs"] = 5
     start = time.time()
-    response = requests.post(OLLAMA_CHAT, json=body, timeout=3600)
-    response.raise_for_status()
+    # Retry if the connection drops (the PC is reached over a network tunnel). A resent request
+    # gets the same answer at temperature 0, so retrying cannot change results.
+    for attempt in range(6):
+        try:
+            # 15 minutes is far longer than any answer should take (the longest pilot answer
+            # took 91 s); a request stuck longer than that is retried.
+            response = requests.post(url, json=body, timeout=900)
+            response.raise_for_status()
+            break
+        except (requests.ConnectionError, requests.Timeout):
+            if attempt == 5:
+                raise
+            time.sleep(5 * 2 ** attempt)
     data = response.json()
     message = data.get("message", {})
     return {
         "config": config_name, "model": cfg["model"], "think": cfg["think"], "options": options,
+        "host": cfg.get("host", "mac"),
         "prompt": prompt, "content": message.get("content", ""), "thinking": message.get("thinking", ""),
         "done_reason": data.get("done_reason"), "prompt_tokens": data.get("prompt_eval_count"),
         "output_tokens": data.get("eval_count"), "seconds": round(time.time() - start, 3),

@@ -12,3 +12,4 @@ __pycache__/
 
 # Tool state from a Claude plugin
 .claude-flow/
+HANDOFF.md
