@@ -23,9 +23,10 @@ SURFACE, INK, MUTED, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
 SLOT = ["#2a78d6", "#eb6834", "#1baf7a"]
 GRAY = "#a9a8a2"
 NAMES = {"qwen3-8b-nothink": "Qwen3 8B", "qwen3-14b-nothink": "Qwen3 14B",
-         "qwen3-8b-think": "Qwen3 8B, thinking on", "gpt-oss-20b-low": "gpt-oss 20B (low reasoning)"}
-PAIR_SETUPS = ["qwen3-8b-nothink", "qwen3-14b-nothink", "gpt-oss-20b-low"]
-LIST_SETUPS = ["qwen3-8b-nothink", "qwen3-14b-nothink", "qwen3-8b-think", "gpt-oss-20b-low"]
+         "qwen3-8b-think": "Qwen3 8B, thinking on", "llama3.1-8b": "Llama 3.1 8B"}
+# gpt-oss-20b-low was skipped and llama3.1-8b added (PREREG.md Deviations, Oct 12, 2026).
+PAIR_SETUPS = ["qwen3-8b-nothink", "qwen3-14b-nothink", "llama3.1-8b"]
+LIST_SETUPS = ["qwen3-8b-nothink", "qwen3-14b-nothink", "llama3.1-8b", "qwen3-8b-think"]
 BANDS = ["1", "2", "3-5", "6-10", "11-25", "26+"]
 LENGTHS = [5, 10, 20]
 
@@ -70,7 +71,8 @@ def fig_date_resolution(res):
     for panel, (kind, title, ref) in enumerate([("stable-right", "Right both ways", 0.95),
                                                  ("flip", "Answer flips when the order is swapped", 0.05)]):
         ax = axes[panel]
-        for k, s in enumerate(setups):
+        for s in setups:
+            k = PAIR_SETUPS.index(s)  # color follows the model, not how many models have data yet
             table = res[s]["pairs"]["by_gap_band"]
             vals = [table[b][kind]["share"] for b in BANDS]
             lo = [table[b][kind]["share"] - table[b][kind]["ci95"][0] for b in BANDS]

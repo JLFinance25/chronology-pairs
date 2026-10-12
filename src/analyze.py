@@ -29,7 +29,8 @@ BOOT_SEED, SHUFFLE_SEED, TIE_SEED = 41, 42, 33
 BANDS = [("1", 1, 1), ("2", 2, 2), ("3-5", 3, 5), ("6-10", 6, 10), ("11-25", 11, 25), ("26+", 26, 10_000)]
 # Thinking-on lists are compared with the thinking-off pair and year answers of the same weights.
 REFERENCE = {"qwen3-8b-think": "qwen3-8b-nothink"}
-SETUPS = ["qwen3-8b-nothink", "qwen3-14b-nothink", "qwen3-8b-think", "gpt-oss-20b-low"]
+# gpt-oss-20b-low was skipped and llama3.1-8b added (PREREG.md Deviations, Oct 12, 2026).
+SETUPS = ["qwen3-8b-nothink", "qwen3-14b-nothink", "llama3.1-8b", "qwen3-8b-think"]
 
 
 def band_of(gap):
@@ -157,7 +158,7 @@ def cycle_test(labels):
     shuffled = []
     for _ in range(N_SHUFFLE):
         w = wrong.copy()
-        for b in set(band):
+        for b in sorted(set(band)):  # fixed order, so seed 42 gives the same shuffles every run
             idx = np.where((band == b) & stable)[0]
             w[idx] = rng.permutation(w[idx])
         shuffled.append(count(w))
@@ -336,7 +337,10 @@ def analyze(setup, lists):
         result["lists"] = list_summary(rows)
         result["q2_decision"] = decision(result["lists"])
     same = [repeats[k]["content"] == main[k]["content"] for k in repeats if k in main]
-    result["repeat_check"] = {"identical": sum(same), "n": len(same)}
+    result["repeat_check"] = {"identical": sum(same), "n": len(same), "by_task": {}}
+    for task in sorted({main[k]["task"] for k in repeats if k in main}):
+        same_task = [repeats[k]["content"] == main[k]["content"] for k in repeats if k in main and main[k]["task"] == task]
+        result["repeat_check"]["by_task"][task] = {"identical": sum(same_task), "n": len(same_task)}
     return result, rows
 
 
