@@ -40,6 +40,11 @@ CONFIGS = {
 MAX_TOKENS = {"pair": 16, "year": 16, "list": 400}
 MAX_TOKENS_THINKING = {"pair": 4096, "year": 4096, "list": 16384}
 
+# One connection reused for the whole run (added Oct 12, 2026, 21:40 UTC). Opening a new connection for
+# every call used up the PC's local ports after ~13,800 fast calls (HTTP 500).
+# This changes only how requests travel, not what is sent, so answers are unaffected.
+SESSION = requests.Session()
+
 
 def chat(config_name, prompt, task, logprobs=False):
     cfg = CONFIGS[config_name]
@@ -66,11 +71,14 @@ def chat(config_name, prompt, task, logprobs=False):
         try:
             # 15 minutes is far longer than any answer should take (the longest pilot answer
             # took 91 s); a request stuck longer than that is retried.
-            response = requests.post(url, json=body, timeout=900)
+            response = SESSION.post(url, json=body, timeout=900)
             response.raise_for_status()
             break
-        except (requests.ConnectionError, requests.Timeout):
-            if attempt == 5:
+        except (requests.ConnectionError, requests.Timeout, requests.HTTPError) as error:
+            # Oct 12: also retry server errors (5xx). The PC's Ollama briefly returned 500s when Windows
+            # ran out of local connection ports during fast runs. Client errors (4xx) still stop the run.
+            response_code = getattr(getattr(error, "response", None), "status_code", None)
+            if attempt == 5 or (response_code is not None and response_code < 500):
                 raise
             time.sleep(5 * 2 ** attempt)
     data = response.json()
