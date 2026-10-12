@@ -171,4 +171,8 @@ The pilot used 25 random events (seed 2026) and 854 calls, plus two short follow
 
 ## Deviations
 
-None yet.
+- **Oct 12, 2026, clarifications only.** Written while the main runs were in progress, before any main-run data was analyzed or looked at. They pin down wording that was ambiguous, and change no rule.
+  1. "Type C rises with length" means the type C share at length 20 is higher than at length 5.
+  2. "The list penalty's 95% range includes zero" (the "mostly in the pairs" rule) must hold at every length: 5, 10 and 20.
+  3. Seeds for the analysis: 41 for the error-range redraws, 42 for the cycle shuffles, and 33 for the win-counting tie-breaks (combined with the setup and list ID).
+  4. The analysis code (`src/analyze.py`) was tested on two made-up models with known answers before use: a consistent but blurry timeline, and random lists.
