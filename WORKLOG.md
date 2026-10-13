@@ -83,4 +83,8 @@ in the repository history.
 - **Jayden Ling** asked that all public documents use a formal tone and that private planning notes be removed.
   Claude Code revised `README.md`, `writeup/REPORT.md`, `PLAN.md` and this log accordingly. `PREREG.md` was not
   rewritten, because it is a dated record.
+- **README layout and credit wording.** At Jayden Ling's request, Claude Code restructured `README.md` to follow the
+  layout common to published research repositories (results table and figure first, Setup, Usage, Contributions,
+  Citation) and reworded the credit line to state his decisions specifically. No result or number was changed.
+  Jayden Ling approved the new README.
 - **Pending:** Jayden Ling's review and approval of `writeup/REPORT.md`.
