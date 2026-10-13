@@ -35,3 +35,4 @@ Who did what, by date. Add a line or two every session.
 - Jayden (Oct 12, analysis sub-session chat): "yes" to the PREREG Deviations wording for the cut-off clarification. Claude added it to PREREG.md exactly as approved and noted it in the results notes.
 - Claude (PC-setup session, Jayden's OK, Oct 12): added `.claude-flow/` to this project's .gitignore so the plugin's folders never get pushed.
 - Claude (Oct 12, about 22:40 UTC): pausing for the night to save usage (Jayden's usage at 90%). The analysis sub-session finished Qwen3 8B, Llama 3.1 8B and Qwen3 14B (commits a678721, e709ecc, 37790d7, 8d19796). The qwen3-8b-think lists run on their own via the waiter script, which closes the job at the end. Left for tomorrow: commit the raw run files, P6 analysis, report and README.
+- Claude (Oct 12 ~8:15 pm, at Jayden's request): committed pending work to this local git repo (nothing pushed; no GitHub remote). Private notes and incomplete run files left out.
