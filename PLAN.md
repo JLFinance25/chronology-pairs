@@ -147,3 +147,10 @@ All of these were made before any model was run.
   - **Change:** lists are answered as a numbered list of codes (format D in `src/prompts.py`), and only the first N entries are scored.
   - **Why:** the planned comma-separated codes gave near-random orders with thinking off, even for 5 events, and endless repetition on 20-event lists. Details are in PREREG.md section 9.
   - **Related:** pair wording A was kept (0 unreadable replies in the pilot).
+
+**Later change, made after the report was written.**
+
+- **Oct 12, public credit, decision 5.**
+  - **Change:** the public credit line now reads "Designed and directed by Jayden Ling. Code, analysis and drafting by Claude Code (an AI agent) under his direction." The README adds a Contributions section listing Jayden's decisions.
+  - **Why:** Jayden's choice. The earlier line did not state the design and study decisions he made. The division of work in decision 4 is unchanged.
+  - **Not changed:** the credit lines at the top of this plan and of `PREREG.md`, which are kept as written.

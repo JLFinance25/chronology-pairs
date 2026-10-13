@@ -1,7 +1,7 @@
 # Work Log
 
-A record of who did what, by date. The study was directed by Jayden Ling; the code, analysis and write-up were
-produced by Claude Code (an AI agent) and checked by Jayden Ling. Times are UTC unless stated otherwise.
+A record of who did what, by date. The study was designed and directed by Jayden Ling; the code, analysis and
+drafting were produced by Claude Code (an AI agent) under his direction. Times are UTC unless stated otherwise.
 
 This log was condensed and edited for a formal tone on October 12, 2026. The original, more detailed entries remain
 in the repository history.
@@ -86,5 +86,7 @@ in the repository history.
 - **README layout and credit wording.** At Jayden Ling's request, Claude Code restructured `README.md` to follow the
   layout common to published research repositories (results table and figure first, Setup, Usage, Contributions,
   Citation) and reworded the credit line to state his decisions specifically. No result or number was changed.
-  Jayden Ling approved the new README.
+  Jayden Ling approved the new README. The same credit wording was then applied, with his approval, to
+  `writeup/REPORT.md`, the header of this log and the repository description, and noted in `PLAN.md` section 8.
+  `PREREG.md` was not changed, because it is a dated record.
 - **Pending:** Jayden Ling's review and approval of `writeup/REPORT.md`.
