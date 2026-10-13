@@ -96,3 +96,22 @@ in the repository history.
   (checked by a separate AI helper: publishing model replies without weights carries no license obligation), and added
   `requirements.txt`. A fresh copy of the repository reproduced every result, table and figure byte for byte. No result
   changed.
+
+### Step 6: exploratory analysis (not pre-registered)
+- **Background.** After the report was drafted, Claude Code noted that the models' strong preference for the first
+  option confounds the "reversal" category: a model that always answers "A" reverses on every pair. It proposed an
+  exploratory re-analysis using the saved answer probabilities, with no new model calls. Jayden Ling deferred it.
+- **Claude Code** (a separate analysis session) carried it out at about 03:10 on October 13 (UTC), using only the
+  saved replies; no model was run. It wrote `src/explore_debias.py`, which removes the first-option preference by
+  averaging each pair's answer probabilities over both orders, compares every pair of events in each valid list with
+  these debiased judgments, and covers the four exploratory items listed in `PREREG.md` section 6. Outputs:
+  `data/processed/results/exploratory_debias.json` and `data/processed/results/tables/exploratory_debias.csv`. Checks:
+  both answer letters were present in all 42,840 thinking-disabled pair replies; the script reproduces the
+  pre-registered pair shares and intervals and the adjacent-error counts exactly; repeated runs give byte-identical
+  output. `src/analyze.py` and all pre-registered results are unchanged.
+- **Claude Code** added section 7, "Exploratory analyses (not pre-registered)", to `writeup/REPORT.md` and renumbered
+  the two sections after it. The main finding qualifies the report's interpretation: after the preference is
+  removed, 40% to 53% of adjacent list errors coincide with an incorrect pair judgment, compared with 53% to 84% under
+  the pre-registered labels. The Summary and `README.md` were not changed.
+- **Pending:** Jayden Ling's review of section 7, and his decision on whether the Summary and `README.md` should
+  mention it.

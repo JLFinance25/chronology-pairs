@@ -326,12 +326,173 @@ These analyses were not pre-registered and should be treated as hypotheses.
   Qwen3 14B 36% to 56% and 35% to 47%. A higher list-only share may therefore indicate a model that answers more pairs
   correctly rather than one that handles lists worse.
 
-### 7. Reproducibility
+### 7. Exploratory analyses (not pre-registered)
+
+These analyses were designed and carried out on October 12, 2026, after all pre-registered results above were final.
+They use only the saved replies; no model was run. They do not alter any pre-registered result, rule or verdict,
+which stand as reported in sections 3 and 4, and they should be treated as hypotheses. Code: `src/explore_debias.py`.
+Results: `data/processed/results/exploratory_debias.json` and `data/processed/results/tables/exploratory_debias.csv`
+(one row per value, with its interval); the field names cited below refer to these files. Intervals follow the
+pre-registered procedures: 2,000 resamples of the 120 events for pair results (seed 41, the same resamples as
+`src/analyze.py`) and 2,000 resamples of lists within each length and spacing group for list results.
+
+#### 7.1 Pair judgments with the first-option preference removed
+
+**Method.** Each pair reply records the model's probabilities for its first answer token. Both "A" and "B" appear
+among them in all 42,840 thinking-disabled pair replies, and the letter given was always the more probable of the two.
+For each order of presentation, the probabilities of "A" and "B" were rescaled to sum to one. The *debiased
+probability* of a pair is the probability that the earlier event is judged earlier, averaged over the two orders.
+Because each event appears once in each position, a fixed preference for the first position acts equally in both
+directions. A pair is counted as judged correctly when its debiased probability exceeds 0.5. This holds exactly when
+the log-odds favoring the correct order, summed over both orders, are positive, so the classification does not depend
+on whether probabilities or log-odds are averaged.
+
+Share of pairs judged correctly after removing the first-option preference (`debiased_correct_share`; 95% interval in
+brackets), with the pre-registered share correct in both orders (section 3.1) in parentheses:
+
+| Gap (years) | Qwen3 8B | Qwen3 14B | Llama 3.1 8B |
+|---|---|---|---|
+| 1 | 50% [38 to 65] (18%) | 50% [37 to 65] (36%) | 47% [34 to 60] (19%) |
+| 2 | 60% [46 to 74] (23%) | 62% [49 to 75] (48%) | 55% [41 to 69] (19%) |
+| 3 to 5 | 59% [50 to 67] (25%) | 64% [56 to 72] (53%) | 55% [46 to 63] (22%) |
+| 6 to 10 | 62% [55 to 69] (29%) | 67% [60 to 75] (56%) | 57% [51 to 63] (24%) |
+| 11 to 25 | 72% [67 to 78] (37%) | 78% [73 to 84] (68%) | 60% [55 to 65] (26%) |
+| more than 25 | 90% [85 to 94] (68%) | 92% [87 to 96] (86%) | 64% [55 to 71] (29%) |
+
+- **No model reaches a date resolution under this measure either.** No gap band reaches 95%
+  (`debiased_date_resolution`). For events one year apart, all three models are at the level of guessing.
+- **Reversals are almost entirely first-option answers.** In 99% of Qwen3 8B reversals, 82% of Qwen3 14B reversals
+  and 99% of Llama 3.1 8B reversals, the model answered "A" in both orders (`flips_with_both_answers_A`, all gaps).
+- **Most reversals nonetheless contain a judgment, and it reflects the model's knowledge of dates.** After the
+  preference is removed, 69% of Qwen3 8B reversals, 66% of Qwen3 14B reversals and 59% of Llama 3.1 8B reversals are
+  judged correctly (`flips_debiased_correct`). Among reversals whose two events the model's own year answers place in
+  the correct order, 72% (Qwen3 8B), 67% (Qwen3 14B) and 60% (Llama 3.1 8B) are judged correctly, against 37%, 42% and
+  34% where the year answers place them in the wrong order (`flips_by_own_year_answers`; the latter rest on 53 to 262
+  reversals and have wide intervals).
+- **How decisive these judgments are.** The threshold set for this analysis, a debiased probability more than 0.25
+  from 0.5, cannot be met by any reversal when probabilities are averaged: in a reversal each order favors a different
+  event, so the average lies between 0.25 and 0.75 by construction. Averaging log-odds instead, which removes a
+  constant shift in log-odds exactly, 2,360 of 2,787 Qwen3 8B reversals (85%; 1,683 correct, 677 incorrect), 755 of
+  919 Qwen3 14B reversals (82%; 526 correct, 229 incorrect) and 155 of 4,202 Llama 3.1 8B reversals (4%; 109 correct,
+  46 incorrect) are clearly decided (`flips_clearly_correct_logodds_average`, `flips_clearly_wrong_logodds_average`).
+  For the Qwen3 models, a reversal therefore usually combines a definite underlying judgment with a strong preference
+  for the first position. For Llama 3.1 8B, most reversals reflect probabilities close to even.
+- **Extreme probabilities.** In 52% of Qwen3 8B reversals and 38% of Qwen3 14B reversals, the letter given had a
+  probability above 0.99 in both orders (`flips_both_orders_above_0.99`), so the debiased judgment rests on comparing
+  small probabilities for the letters not given. The agreement with the year answers suggests these comparisons carry
+  information, but they are not calibrated confidence (section 7.3).
+
+#### 7.2 Origin of list errors without dependence on pair accuracy (Q2)
+
+**Method.** The list-only share in section 3.3 depends on how many pairs a model answers correctly in both orders
+(section 5), and it counts every reversal as an error already present at the pair level. Here, for every pair of
+events in each valid list (all pairs, not only adjacent ones), the list's order was compared with the debiased pair
+judgment. *Agreement* is the share of these pairs that the list places in the order the pair judgment favors. It
+treats correct and incorrect pair judgments alike. It is compared with the agreement expected if list errors and pair
+errors were unrelated, given the accuracy of each, using Cohen's kappa (0 means no more agreement than unrelated errors
+would produce; 1 means complete agreement). Thinking-enabled lists are compared with the thinking-disabled pair
+answers of Qwen3 8B, as in the pre-registered analysis.
+
+| | Length | Pairs in correct order: list / debiased pair judgment | Agreement (expected if unrelated) | Kappa [interval] | Adjacent errors also judged incorrectly after debiasing [interval] | Pre-registered equivalent: B + U |
+|---|---|---|---|---|---|---|
+| Qwen3 8B | 5 | 58% / 63% | 66% (52%) | 0.29 [0.20 to 0.36] | 49% [42 to 56] | 81% |
+| | 10 | 65% / 69% | 68% (56%) | 0.28 [0.23 to 0.33] | 40% [36 to 45] | 75% |
+| | 20 | 66% / 69% | 65% (56%) | 0.21 [0.10 to 0.30] | 43% [37 to 48] | 69% |
+| Qwen3 14B | 5 | 65% / 67% | 77% (55%) | 0.48 [0.41 to 0.55] | 53% [45 to 61] | 65% |
+| | 10 | 70% / 73% | 75% (59%) | 0.38 [0.33 to 0.43] | 41% [36 to 45] | 53% |
+| | 20 | 71% / 73% | 73% (60%) | 0.34 [0.29 to 0.39] | 41% [35 to 47] | 53% |
+| Llama 3.1 8B | 5 | 64% / 53% | 57% (51%) | 0.13 [0.06 to 0.20] | 53% [45 to 61] | 84% |
+| | 10 | 68% / 56% | 60% (52%) | 0.17 [0.12 to 0.22] | 53% [48 to 58] | 80% |
+| | 20 | 67% / 59% | 61% (53%) | 0.16 [0.08 to 0.23] | 49% [42 to 56] | 82% |
+| Qwen3 8B, thinking enabled | 5 | 90% / 63% | 65% (60%) | 0.11 [0.04 to 0.18] | 53% [39 to 67] | 82% |
+| | 10 | 92% / 69% | 70% (65%) | 0.14 [0.09 to 0.18] | 49% [40 to 57] | 72% |
+| | 20 | 93% / 70% | 70% (68%) | 0.09 [0.04 to 0.14] | 41% [34 to 49] | 76% |
+
+Source: `lists_by_length` in the results files (`list_correct_share_all_pairs`,
+`debiased_pair_correct_share_all_pairs`, `agreement_all_pairs`, `agreement_if_independent`, `kappa`,
+`adjacent_errors_also_wrong_debiased`). The last column is one minus the pre-registered list-only share (section 3.3).
+
+- **List order is related to the debiased pair judgments, but only partly.** Agreement exceeds what unrelated errors
+  would produce in every case (all kappa intervals lie above zero). With thinking disabled, however, lists disagree
+  with the model's own debiased pair judgment on 23% to 43% of pairs. For Qwen3 8B, lists and debiased pair judgments
+  are about equally accurate, yet they differ on about a third of pairs. For Qwen3 14B, agreement beyond chance
+  declines with length (kappa 0.48 at 5 events and 0.34 at 20; the intervals do not overlap).
+- **About half of adjacent list errors coincide with an incorrect debiased pair judgment.** The share was 40% to 53%
+  across setups and lengths, compared with 53% to 84% under the pre-registered labels, which count every reversal as
+  a pair-level error. The remaining 47% to 60% of adjacent errors involve a pair the model judges correctly once the
+  preference is removed. Across all pairs in the lists, 45% to 64% of the pairs that a thinking-disabled list placed
+  in the wrong order were also judged incorrectly after debiasing (`list_errors_also_wrong_debiased`), against 27% to
+  47% of all pairs in those lists (one minus the pair accuracy in the table).
+- **By pre-registered label** (`agreement_stable_right_pairs`, `agreement_flip_pairs`,
+  `agreement_stable_wrong_pairs`). With thinking disabled, lists placed 17% to 24% of stable-right pairs in the wrong
+  order, with no clear change across lengths. They followed the debiased judgment on 54% to 61% of reversal pairs, and
+  repeated the stable-wrong answer on 57% to 76% (Qwen3 models) and 46% to 49% (Llama 3.1 8B) of stable-wrong pairs.
+  With thinking enabled, lists misordered 3% to 6% of stable-right pairs and repeated the thinking-disabled
+  stable-wrong answer on only 17% to 24% of stable-wrong pairs.
+- **Pair-based ordering with the preference removed.** Ordering each list by its events' summed debiased
+  probabilities predicted 1.76, 3.95 and 8.87 adjacent errors per valid Qwen3 8B list (5, 10 and 20 events), against
+  1.87, 4.10 and 8.60 for the pre-registered win counting and 1.87, 4.04 and 9.40 observed
+  (`mean_debiased_predicted_errors`, `mean_prereg_predicted_errors`, `mean_adjacent_errors`). Relative to this
+  prediction, the Qwen3 8B list penalty is +0.11 [-0.08 to +0.30], +0.09 [-0.20 to +0.38] and +0.53 [-0.29 to +1.29]
+  (`mean_debiased_penalty`); the interval at 20 events includes zero, unlike the pre-registered penalty (+0.80, 0.33
+  to 1.28). For Qwen3 14B it is -0.01 [-0.19 to +0.17], +0.46 [+0.17 to +0.77] and 0.00 [-0.81 to +0.81]. For Llama
+  3.1 8B it is below zero at every length (-0.28, -0.42 and -1.12; all intervals below zero): its lists were ordered
+  much better than its debiased pair judgments would order them (mean Kendall tau 0.27 to 0.36, against 0.04 to 0.15;
+  `mean_tau`, `mean_debiased_predicted_tau`). This comparison is a sensitivity check and does not change the
+  pre-registered verdicts.
+
+#### 7.3 Further exploratory items listed in the pre-registration (`PREREG.md` section 6)
+
+- **Probability of the given answer versus gap** (`mean_p_answer`, `mean_p_answer_when_correct`,
+  `mean_p_answer_when_wrong`). The probability the models attached to their answers barely changed with the gap:
+  0.95 to 0.97 in every band for Qwen3 8B, 0.96 to 0.99 for Qwen3 14B and 0.70 to 0.72 for Llama 3.1 8B. Incorrect
+  answers received nearly as much probability as correct ones: for events more than 25 years apart, 0.93 against 0.98
+  (Qwen3 8B), 0.95 against 0.99 (Qwen3 14B) and 0.70 against 0.73 (Llama 3.1 8B). For events one year apart, incorrect
+  answers received no less probability than correct ones for either Qwen3 model. The probability of an answer is
+  therefore a weak guide to its accuracy for these models.
+- **First-option preference by gap** (`share_A_answers`). For Qwen3 8B, the share of "A" answers fell from 82% [73 to
+  90] for events one year apart to 64% [61 to 68] for events more than 25 years apart: the preference is strongest
+  where the model's judgments are weakest. For Qwen3 14B (54% to 56%) and Llama 3.1 8B (78% to 80%), it did not vary
+  with the gap.
+- **Era of the list** (`lists_by_era`). Lists were grouped by the middle year of their events, and each valid list's
+  Kendall tau was compared with the mean for valid lists of the same length and spacing (`mean_tau_vs_cell_mean`), since
+  the periods contain different mixes of list lengths. Lists centred before 1940 were ordered less well than
+  comparable lists in all four setups: tau differences of -0.10 [-0.18 to -0.02] (Qwen3 8B), -0.07 [-0.16 to +0.02]
+  (Qwen3 14B), -0.12 [-0.21 to -0.02] (Llama 3.1 8B) and -0.07 [-0.13 to +0.00] (thinking enabled); the intervals
+  exclude zero for Qwen3 8B and Llama 3.1 8B only. No difference was established for lists centred in 1940 to 1979 or
+  1980 to 2019. Debiased pair accuracy for events at most 10 years apart rose from the earliest to the latest period
+  for both Qwen3 models (57%, 59% and 64%; 59%, 64% and 69%), with overlapping intervals, but not for Llama 3.1 8B
+  (56%, 52% and 58%) (`pairs_by_era_gap_1_to_10`).
+- **Year-question accuracy by decade** (`year_by_decade`). Exact years per decade (10 events each) ranged from 5 to
+  10 for Qwen3 8B (lowest in the 1940s), from 7 to 10 for Qwen3 14B and from 7 to 10 for Llama 3.1 8B, with no
+  consistent trend across the period.
+
+#### 7.4 Bearing on the conclusions
+
+- **Q1.** Removing the first-option preference raises the share of pairs judged correctly considerably (for events
+  more than 25 years apart, from 68% to 90% for Qwen3 8B and from 29% to 64% for Llama 3.1 8B), but no model reaches
+  95%, so the conclusion that no model reached a reliable date resolution holds under this measure as well. Most
+  reversals by the Qwen3 models reflect the preference for the first option rather than an absence of judgment.
+- **Q2.** The conclusion that most list errors are already present at the pair level (Summary and section 3.3) rests
+  on counting every reversal as a pair-level error. Once the first-option preference is removed, about half of
+  adjacent list errors (40% to 53%) coincide with an incorrect pair judgment, and the remainder occur on pairs that the
+  model judges correctly. For the Qwen3 models, the number of list errors remains close to what the debiased pair
+  judgments predict, so lists are not clearly worse than the pair judgments; rather, list errors and pair errors
+  overlap only in part. These results weaken the pair-level account of list errors as stated in the Summary. They are
+  exploratory and do not change the pre-registered verdicts.
+- **Limitations specific to these analyses.** The adjustment assumes that the preference for the first position acts
+  equally in both orders. It relies on probabilities that the models compute but do not give as answers, and for the
+  Qwen3 models these are extreme and poorly calibrated (section 7.3). The analyses were chosen after the pre-registered
+  results were known.
+
+### 8. Reproducibility
 
 See `README.md`. All results can be regenerated from the saved raw replies without running any model:
-`python3 src/analyze.py`, `python3 src/p6.py` and `python3 src/make_figures.py`.
+`python3 src/analyze.py`, `python3 src/p6.py` and `python3 src/make_figures.py`. The exploratory analyses in section 7
+are regenerated by `python3 src/explore_debias.py`, which reads the saved replies and the per-list files written by
+`src/analyze.py`.
 
-### 8. References
+### 9. References
 
 - Wongchamcharoen, P. K., and Glasserman, P. (2025). Do Large Language Models (LLMs) Understand Chronology?
   arXiv:2511.14214. https://arxiv.org/abs/2511.14214 (accessed October 12, 2026).
