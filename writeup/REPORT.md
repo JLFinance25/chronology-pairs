@@ -1,6 +1,6 @@
 # Pairwise Temporal Judgments and List Ordering in Small Language Models
 
-**Study directed by Jayden Ling. Code, analysis and write-up by Claude Code (an AI agent), checked by Jayden.**
+**Designed and directed by Jayden Ling. Code, analysis and drafting by Claude Code (an AI agent) under his direction.**
 
 Report dated October 12, 2026. **Status: draft, pending review and approval by Jayden Ling.**
 
@@ -130,7 +130,7 @@ narrow because lists share events. Cycle counts are compared with 1,000 random r
 stable-wrong answers within each gap band.
 
 **Code.** `src/analyze.py` (all pre-registered results), `src/p6.py` (prediction P6), `src/make_figures.py` (figures)
-and `src/explore_cutoff.py` (an exploratory comparison, section 4). The code was written by Claude Code. The analysis
+and `src/explore_cutoff.py` (an exploratory comparison, section 4). The code was written by the AI agent. The analysis
 code was tested on two simulated models with known answers before any main data were examined (`PREREG.md`
 Deviations, clarification 4).
 
