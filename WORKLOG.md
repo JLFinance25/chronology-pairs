@@ -121,3 +121,7 @@ in the repository history.
   CC BY 4.0 for the report and figures, CC BY-SA 4.0 for data derived from Wikipedia) and corrected the README to state
   that the pre-registration was drafted by the AI agent and committed before any main-run call, and that Jayden Ling
   approved the main runs. No result changed.
+- **Repository history edited.** With Jayden Ling's approval, private planning notes and internal coordination
+  details were removed from earlier versions of `PLAN.md`, `WORKLOG.md` and `src/llm.py` and from five commit
+  messages. Results, data, dates and authors were not changed. Every commit identifier changed;
+  `verification/commit_id_map.csv` maps the original identifiers to the current ones.
