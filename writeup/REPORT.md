@@ -2,7 +2,8 @@
 
 **Designed and directed by Jayden Ling. Code, analysis and drafting by Claude Code (an AI agent) under his direction.**
 
-Report dated October 12, 2026. **Status: draft, pending review and approval by Jayden Ling.**
+Report dated October 12, 2026. Exploratory analyses (section 7) added and the report checked by Jayden Ling on
+October 13, 2026.
 
 ---
 
@@ -37,8 +38,9 @@ predictions were fixed in `PREREG.md` before the main data were collected.
    was 19% to 31% for Qwen3 8B, 16% to 20% for Llama 3.1 8B and 35% to 47% for Qwen3 14B, depending on list length.
    Under the pre-registered decision rules, Qwen3 8B shows "a real long-list penalty" (0.80 more adjacent errors per
    20-event list than its pair answers predict, interval 0.33 to 1.28). This verdict depends on how replies that
-   reached the length limit are scored (section 4); under the alternative reading it is "in between". Qwen3 14B and
-   Llama 3.1 8B are classified "in between". Separately, long lists were frequently incomplete: only 25% (Qwen3 8B),
+   reached the length limit are scored (section 4); under the alternative reading it is "in between". Qwen3 14B and Llama 3.1 8B are classified "in between". An exploratory
+   re-analysis that removes the models' preference for the first option (section 7) weakens this pair-level account:
+   about half of adjacent list errors (40% to 53%) then coincide with an incorrect pair judgment. Separately, long lists were frequently incomplete: only 25% (Qwen3 8B),
    50% (Qwen3 14B) and 28% (Llama 3.1 8B) of 20-event answers contained every event exactly once.
 4. **Reasoning improves list ordering substantially, but not chiefly by removing list-only errors.** With thinking
    enabled, Qwen3 8B ordered 57% of 5-event lists exactly (3% with thinking disabled) and made 5.3 fewer adjacent
@@ -49,8 +51,11 @@ predictions were fixed in `PREREG.md` before the main data were collected.
    same wrong order when asked directly, compared with 12% with thinking disabled.
 
 **Interpretation.** For these small models, the failure to order long lists is largely not a new phenomenon that
-emerges with length. It mostly reflects the same uncertainty observed on single pairs, chiefly answers that depend
-on the order of presentation, together with a separate tendency to omit events from long lists. Reasoning reduces
+emerges with length. Under the pre-registered measures, it mostly reflects the same uncertainty observed on single
+pairs, chiefly answers that depend on the order of presentation, together with a separate tendency to omit events
+from long lists. An exploratory re-analysis qualifies this: most order-dependent answers reflect a preference for
+the first option presented rather than an absence of judgment, and once that preference is removed, list errors and
+pair errors overlap only in part (section 7). Reasoning reduces
 errors considerably, and the errors that remain are more often attributable to incorrect knowledge of dates. For
 practitioners using small models to order events, the results suggest that, without reasoning, the relative order
 of events less than about 25 years apart should not be relied upon, and that outputs should be checked for omitted

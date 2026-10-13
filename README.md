@@ -28,7 +28,9 @@ All three models were run with reasoning disabled. Sources and 95% intervals are
 
 - **No model reached a reliable "date resolution".** No gap between events, including more than 25 years, met the
   pre-registered threshold.
-- **Most list errors were already uncertain or incorrect at the pair level.**
+- **Most list errors were already uncertain or incorrect at the pair level** under the pre-registered measures. An
+  exploratory re-analysis that removes the models' preference for the first option weakens this: about half of list
+  errors (40% to 53%) then coincide with an incorrect pair judgment ([report, section 7](writeup/REPORT.md)).
 - **Reasoning improved list ordering substantially** (Qwen3 8B ordered 57% of 5-event lists exactly with reasoning
   enabled, against 3% with it disabled) but did not specifically reduce errors that occur only within lists.
 

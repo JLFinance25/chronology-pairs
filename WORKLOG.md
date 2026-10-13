@@ -125,3 +125,6 @@ in the repository history.
   details were removed from earlier versions of `PLAN.md`, `WORKLOG.md` and `src/llm.py` and from five commit
   messages. Results, data, dates and authors were not changed. Every commit identifier changed;
   `verification/commit_id_map.csv` maps the original identifiers to the current ones.
+- **Final review.** Jayden Ling confirmed that he checked the work and approved publication. At his instruction,
+  Claude Code added to the report Summary and the README a statement that the exploratory re-analysis (report section
+  7) weakens the pair-level account of list errors, and marked the report as checked.
