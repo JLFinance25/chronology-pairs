@@ -13,3 +13,6 @@ __pycache__/
 # Tool state from a Claude plugin
 .claude-flow/
 HANDOFF.md
+
+# Internal working notes (superseded by writeup/REPORT.md)
+data/processed/results/NOTES-*.md

@@ -1,6 +1,6 @@
 # Plan: Chronology Pairs
 
-Written Oct 12, 2026, at the end of the planning session. Status: **waiting for Jayden's OK.** Nothing has been run or downloaded.
+Written Oct 12, 2026, at the end of the planning session, and approved by Jayden Ling the same day, before any data was downloaded or any model was run. This is the original plan, kept as a dated record; later changes are listed in section 8 and in the Deviations section of `PREREG.md`. The results are in `writeup/REPORT.md`.
 
 **Who does what.** Study directed by Jayden Ling. Code, analysis and write-up by Claude Code (an AI agent), checked by Jayden. Jayden chose this split on Oct 12, 2026. Every public mention of the project uses that credit line.
 
@@ -40,7 +40,7 @@ This study asks two things about small AI models that run on a home computer:
 | 10 | Lists | Lengths 5, 10 and 20, crossed with the gap between neighboring events: tight (1 to 2 years), medium (3 to 5), wide (6 to 10). Length 20 with wide gaps is dropped because it needs at least 114 of the 119 available years. 8 cells, 30 lists each, the same lists for every model. | Holds spacing in a band while length changes, at the close gaps where pair mistakes should live. | Claude |
 | 11 | List answer format | Each event gets a random two-letter code. The model returns the codes in order. | Exact, automatic scoring. *Think*: it may cause fewer dropped or invented items than writing out names, which the write-up will say. | Claude |
 | 12 | Error ranges | Pair results: 2,000 redraws of the events (bootstrap over events). List results: 2,000 redraws of lists within each cell, flagged as possibly too narrow because lists share events. | Events, not questions, are the real sample. | Claude |
-| 13 | Publishing | GitHub repo with a short report, only with Jayden's OK. arXiv only with honest authorship and an endorser who is comfortable with it. Not for student journals or science fairs, which require the student to do the research. | Matches decision 4. | Claude, from Jayden's goals |
+| 13 | Publishing | A public GitHub repository with a short report, released only with Jayden's approval. Any further publication only with the credit line above stated in full. Not submitted to venues that require the student to have carried out the research. | Matches decision 4. | Claude, from Jayden's goals |
 
 ## 3. How the questions are asked
 
@@ -104,8 +104,8 @@ Each step needs Jayden's OK before it starts. Dates are *guesses* until the pilo
 | 4 | Oct 17 to 21 | **Main runs:** year check and pair table for Qwen3 8B and 14B; lists with thinking off and on. A rerun of 500 pairs and 30 lists checks repeatability. | OK each run |
 | 5 | Oct 21 to 24 | **Stretch:** gpt-oss 20B, while the analysis starts | OK |
 | 6 | Oct 21 to 28 | **Analysis and charts:** date resolution curves, the A/B/U/C split by length, observed vs predicted list mistakes, cycles vs shuffles | None |
-| 7 | Oct 28 to Nov 3 | **Report and README** | Can wait until after a busy week |
-| 8 | Nov 3 to 6 | Jayden reads the one-page result until he can explain it. Then, with his OK: public release. | Read, ask questions, OK each public step |
+| 7 | Oct 28 to Nov 3 | **Report and README** | None |
+| 8 | Nov 3 to 6 | Jayden reviews the report until he can explain every result. Public release only with his approval. | Review, question, approve release |
 
 **Stop and change rules (fixed now):**
 - If more than 5% of pilot replies can't be read after one prompt fix, change the prompt or parser and write a dated note before the main runs.

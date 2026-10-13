@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 import requests
 
 OLLAMA_CHAT = "http://localhost:11434/api/chat"
-# The Windows PC's Ollama, reached through an SSH tunnel:
+# The Windows PC's Ollama, reached from the Mac through an SSH tunnel:
 #   ssh -f -N -o ServerAliveInterval=15 -L 127.0.0.1:11500:127.0.0.1:11434 pc
 # Moved from port 11435 on Oct 12, 2026: that tunnel stopped passing traffic.
 PC_CHAT = "http://127.0.0.1:11500/api/chat"

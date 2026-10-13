@@ -82,14 +82,14 @@ JUDGMENT_CALLS = [
     "or an entry that is not one of the list's codes also makes the list invalid. Codes are matched case-sensitively "
     "(no entry matched only after upper-casing).",
     "Cut-off replies: lists whose reply hit the 400-token limit are still scored on their first N entries if those are "
-    "valid (PREREG section 5 reading, as instructed). This affects only qwen3-8b-nothink (16 of its 184 valid lists; see "
+    "valid (PREREG section 5 reading, as adopted in the PREREG Deviations). This affects only qwen3-8b-nothink (16 of its 184 valid lists; see "
     "table). Under the stricter section 3 reading ('cut off counts as unreadable') those lists would be invalid.",
     "Wrong neighbor pairs: only in valid lists; consecutive entries where the first event's true year is later. Labeled "
     "C/U/B/X from the pair label of that unordered pair for the same setup (Qwen3 8B-think uses qwen3-8b-nothink "
     "labels). The 'misdated' flag (year answers), win counting, list penalty, Kendall tau and error ranges were not "
     "computed. 'Exactly right' counts valid lists with zero wrong neighbor pairs (extra).",
-    "qwen3-8b-think: the file already had all 240 non-repeat list records when I started (no waiting needed). Every "
-    "reply ended with done_reason 'stop'; I used the `content` field (the final answer) and not `thinking`. List ids, "
+    "qwen3-8b-think: the file contains all 240 non-repeat list records. Every "
+    "reply ended with done_reason 'stop'; the `content` field is used (the final answer) and not `thinking`. List ids, "
     "codes and true years are identical across all four files.",
 ]
 

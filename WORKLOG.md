@@ -1,39 +1,86 @@
 # Work Log
 
-Who did what, by date. Add a line or two every session.
+A record of who did what, by date. The study was directed by Jayden Ling; the code, analysis and write-up were
+produced by Claude Code (an AI agent) and checked by Jayden Ling. Times are UTC unless stated otherwise.
 
-## 2026-10-12
-- Jayden: kept this as a backup idea after choosing `../phantom-answers` as the main project; asked for a folder for each finalist.
-- Claude: ran the idea search that produced this idea and its refuter fixes; set up this folder, README and SOURCES.md. No project code written by Claude.
+This log was condensed and edited for a formal tone on October 12, 2026. The original, more detailed entries remain
+in the repository history.
 
-## 2026-10-12 (planning session)
-- Jayden: answered the planning questions; chose 120 events (one per year, 1900 to 2019, checked on Wikipedia and Wikidata), the random-month picking rule, and no-leak event wording. Decided that for this project Claude writes all code, analysis and write-up while he directs, approves each run and checks results, with the public credit line in PLAN.md.
-- Claude: ran the planning questions; checked Google AI tool terms (Gemini API requires 18+), Colab and Kaggle GPU limits, and JEI and arXiv rules; checked this Mac (Ollama already has qwen3:8b, qwen3:14b, gpt-oss:20b); wrote PLAN.md, including the scoring, model and scope decisions Jayden handed to Claude. No code written, no models run, nothing downloaded.
-- Jayden (later Oct 12): approved PLAN.md, the integrity change, and the Step 1 downloads; chose to run everything on the MacBook.
-- Claude (later Oct 12): Step 1, the answer key. Wrote `src/common.py`, `pick_months.py`, `fetch_year_pages.py`, `select_events.py` and `build_answer_key.py`. Downloaded 120 Wikipedia year pages and Wikidata dates (logged in `data/raw/SOURCES.md`). Picked one event per year, wrote the 120 no-leak descriptions in `data/manual/event_wording.csv`, and built `data/processed/events.csv`. Tightened two rules before any model run, both recorded in PLAN.md section 8: exact-day Wikidata match, and a notability floor of 20 language editions. Answer key fingerprint: 09b8fb5d6f705c0c1ea957cb4a53e52836787a6f5e8c6aca4d5e2ebb6c5f4916. No models run.
-- Jayden (later Oct 12): spot-checked 10 event dates (all OK) and approved the pilot.
-- Claude (later Oct 12): Step 2, the pilot, on this Mac. Wrote `src/llm.py`, `prompts.py`, `pilot.py`, `pilot2.py`, `pilot3.py`, `pilot_report.py`, `make_main_lists.py` and `run_main.py`. 906 pilot calls in total. The pilot found that the planned list format gave near-random orders, so lists switched to a numbered format, logged in PLAN.md section 8. Made the 240 main lists. Wrote PREREG.md. No main-run calls yet.
-- Jayden (Oct 12): approved the numbered list format and all four main runs.
-- Claude (Oct 12): started the main runs (19:05 UTC), wrote and tested `src/analyze.py` on two made-up models with known answers, added pre-analysis clarifications to PREREG.md.
-- Claude (Oct 12, about 20:05 UTC): the Qwen3 8B run finished (15,170 calls, 0 unreadable pair replies, 530 of 530 repeats identical). Ran the pre-registered analysis on it and drew the first charts. Added one exploratory check, labeled as such: pairs where the model named both years exactly. Qwen3 14B is now running.
-- Claude (Oct 12, at Jayden's request, for a Mac vs PC speed test): stopped the Mac qwen3-14b chain (about 1,000/14,280 pairs, after Jayden resumed it) and the llama3.1-8b run on the PC (about 2,000+/14,280 pairs), and unloaded all models on both machines. Both runs resume from their saved .jsonl files; the queued Mac runs (qwen3-8b-think lists, gpt-oss-20b-low) have not started.
-- Claude (Oct 12, Jayden asked): Mac vs PC speed test with matching settings (switched the PC's Ollama to defaults; old start-up file backed up). Results in the PC setup notes: 8B models equal or faster on the PC, qwen3:14b and gpt-oss:20b 2-4x faster on the Mac. The SSH tunnel on port 11435 that the llama3.1-8b run uses stopped working; it needs a fresh tunnel before that run resumes.
-- Claude (Oct 12, about 21:00 UTC, new build session, read-only check): counted the saved calls. `qwen3-14b-nothink`: 1,394 of 14,280 pairs plus 120 years. `llama3.1-8b`: 7,998 of 14,280 pairs plus 120 years (the "about 2,000+" logged above was wrong). Nothing running on the Mac or PC, no models loaded, model IDs match PREREG.md. Found that the Llama calls span a probable PC restart (172 s gap at about 20:27 UTC) and that the PC's Ollama settings were switched to defaults after the run stopped, so resuming would mix settings inside one setup. Updated the project status notes. Started, stopped and changed no run.
-- Claude (Oct 12, Jayden's OK): set aside the mixed-settings Llama file (renamed, not deleted), restarted llama3.1-8b from scratch on the PC with Ollama defaults, and recorded the rerun and the decision to skip gpt-oss-20b in PREREG.md Deviations. qwen3-14b is running on the Mac. Next: qwen3-8b-think lists, after a 5-list fit check on the PC.
-- Claude (Oct 12, 21:10 UTC): Jayden OK'd resuming qwen3-14b on the Mac if no other project was using it. Found it already running (resumed 20:59 UTC by the other chronology-pairs session) with no other project on the Mac, so started nothing. Updated the project status notes.
-- Claude (Oct 12, 21:30 UTC, read-only checks): the llama3.1-8b rerun did not finish. It crashed at 21:24 UTC at 13,710 of 14,280 pairs (lists and repeats not run) on an HTTP 500 from the PC. The PC's Ollama log shows Windows refused a local socket ("Only one usage of each socket address"), and `src/llm.py` retries dropped connections but not 500s. At 21:25 UTC a leftover qwen3-8b-think fit check, chained by the now-archived old session (scratchpad script, not study data), started on the PC automatically. Stopped and started nothing; asked Jayden.
-- Claude (Oct 12, 21:30 UTC): the leftover fit check failed on its first list and saved nothing; closed its entry in the shared run queue. At 21:27 UTC another Claude session (not this one) changed `src/llm.py` to also retry 5xx errors (not committed) and resumed llama3.1-8b outside the waiting line. The Mac-to-PC tunnel had already closed, so that attempt exited at 21:29 with no new calls (still 13,710 of 14,280 pairs). Another project was next in line for the PC.
-- Claude (Oct 12, ~21:30 UTC): llama3.1-8b crashed at 13,830/15,170 calls on PC 500 errors (Windows ran out of local ports). Changed src/llm.py to also retry 5xx server errors (same request at temperature 0, so answers cannot change). A waiting script had started the 5-list fit check after the crash instead of after a finish; Claude stopped it (scratch output deleted). Joined the new shared GPU queue: #4 finish llama, #5 fit check (only if llama reaches 15,170). Added date-label-leak runs to the dashboard.
-- Claude (Oct 12, about 21:35 UTC): Jayden decided Llama finishes on the PC before another project's run. `src/llm.py` now reuses one connection per run and retries 5xx (commit 8006931, tested on a fake server; no change to model, prompts or settings). Confirmed the PC's Ollama server has run on defaults since its 16:46 local restart, before the Llama rerun began. Joined the shared run queue and resumed llama3.1-8b at 21:34 UTC from its saved file (the 21:24 crash left 13,710 of 14,280 pairs; same settings). Jayden also decided that qwen3-8b-think runs on the Mac after qwen3-14b, with no PC fit check. That run still needs his go.
-- Jayden (Oct 12): approved queuing the thinking lists on the Mac. Claude: added qwen3-8b-think lists to the shared run queue for the Mac (4 h, pilot estimate) and started a waiter script that starts it when qwen3-14b is done, frees the 14B's memory first, heartbeats every 20 min and closes the job at the end.
-- Claude (Oct 12, 21:40 UTC): llama3.1-8b finished at 21:39 UTC: 15,170 calls (120 years, 14,280 pairs, 240 lists, 530 repeats), no duplicate keys, 0 unreadable pair replies, all on the PC with Ollama defaults. Repeat check: 500 of 500 pair repeats identical, but only 24 of 30 list repeats identical at temperature 0 (Qwen3 8B on the Mac had 30 of 30); to be reported. Closed its queue entry and unloaded llama3.1:8b on the PC.
-- Claude (PC-setup session, Jayden's OK, Oct 12 ~6:10 pm): moved the ruflo plugin's `.claude-flow` folder(s) out of `data/` into `chronology-pairs/.claude-flow/moved-out-of-data/` (not deleted). No data files touched.
-- Claude (Oct 12, 22:15 UTC): qwen3-14b-nothink finished at 22:12 UTC: 15,170 calls, no duplicate keys, 0 unreadable pair replies, repeat check 500 of 500 pairs and 30 of 30 lists identical, 3 lists cut off at the reply limit. Closed its queue entry. The waiter script started qwen3-8b-think lists at 22:12:55 UTC on the Mac, with qwen3:14b unloaded first (qwen3:8b at 20,480 context, 100% GPU). The analysis session is adding the 14B results.
-- Claude (Oct 12, about 22:20 UTC, analysis sub-session; no model calls): ran the pre-registered analysis (`src/analyze.py`) on llama3.1-8b and qwen3-14b-nothink (the 14B only after its file had 15,170 lines and its process had exited), redrew the charts, and wrote `data/processed/results/NOTES-2026-10-12.md` (P1 to P5 and the Q2 rules per setup). Q2 verdicts: Qwen3 8B "a real long-list penalty", Qwen3 14B "in between", Llama 3.1 8B "in between". Code changes: added llama3.1-8b and dropped gpt-oss-20b-low in `analyze.py` and `make_figures.py`; fixed the circle-check shuffles so seed 42 gives the same result every run (only Qwen3 8B's shuffle baseline moved, 3,277.95 to 3,280.88); split the repeat check into pairs and lists; kept each model's chart color fixed; added `src/explore_cutoff.py` (exploratory). All three setups' results reproduce byte for byte.
-- Claude (same session), for Jayden: PREREG reads two ways on lists cut off at the reply limit (section 3 vs section 5), and the Qwen3 8B verdict changes to "in between" under the section 3 reading (notes, flag 2). Needs his decision. Also: my two run-watcher scripts matched the thinking-run waiter's `pgrep` check until I stopped them at 22:12 UTC, so they may have delayed its start by up to about a minute.
-- Jayden (Oct 12, in the analysis sub-session chat): "use the section 5 reading, keep the code as is". Cut-off list replies that wrote all N events stay scored as valid, so Qwen3 8B's Q2 verdict stays "a real long-list penalty". Claude recorded this in the results notes (flag 2), with the point that the choice came after the other reading's result was known. PREREG Deviations not edited yet (needs Jayden's OK on the wording).
-- Jayden (Oct 12, analysis sub-session chat): "yes" to the PREREG Deviations wording for the cut-off clarification. Claude added it to PREREG.md exactly as approved and noted it in the results notes.
-- Claude (PC-setup session, Jayden's OK, Oct 12): added `.claude-flow/` to this project's .gitignore so the plugin's folders never get pushed.
-- Claude (Oct 12, about 22:40 UTC): pausing for the night to save usage (Jayden's usage at 90%). The analysis sub-session finished Qwen3 8B, Llama 3.1 8B and Qwen3 14B (commits a678721, e709ecc, 37790d7, 8d19796). The qwen3-8b-think lists run on their own via the waiter script, which closes the job at the end. Left for tomorrow: commit the raw run files, P6 analysis, report and README.
-- Claude (Oct 12 ~8:15 pm, at Jayden's request): committed pending work to this local git repo (nothing pushed; no GitHub remote). Private notes and incomplete run files left out.
-- Claude (Oct 12, about 21:30 to 22:15 EDT; Jayden asked to finish the project tonight): qwen3-8b-think lists finished (240 of 240) and were committed. Ran the pre-registered analysis on them; wrote `src/p6.py` for P6 (paired list redraws; not supported); redrew the charts for all four setups; saved the cut-off comparison output. Wrote `writeup/REPORT.md` (one-page summary plus full report) and a new `README.md`. A Sonnet helper independently recomputed the headline pair, circle and list numbers from the raw replies without seeing the analysis code; all matched (script and output in `verification/`). Not yet read or approved by Jayden; nothing pushed.
+## October 12, 2026
+
+### Planning
+- **Jayden Ling** selected this project from a set of candidate ideas and made the main design decisions: 120 events
+  (one per year, 1900 to 2019, verified against Wikipedia and Wikidata), the random-month selection rule, and event
+  wording that does not reveal dates. He decided that Claude Code would write the code, analysis and write-up while
+  he directed the study, approved each model run and download, and checked the results, under the credit line in
+  `PLAN.md`.
+- **Claude Code** conducted the planning questions, checked the terms of the tools considered, confirmed the locally
+  available models, and wrote `PLAN.md`. No code was written, no model was run and no data was downloaded at this
+  stage.
+- **Jayden Ling** approved `PLAN.md` and the Step 1 downloads.
+
+### Step 1: answer key
+- **Claude Code** wrote `src/common.py`, `src/pick_months.py`, `src/fetch_year_pages.py`, `src/select_events.py` and
+  `src/build_answer_key.py`; downloaded the 120 Wikipedia year pages and the matching Wikidata dates (logged in
+  `data/raw/SOURCES.md`); selected one event per year; wrote the 120 event descriptions
+  (`data/manual/event_wording.csv`); and built `data/processed/events.csv`. Two selection rules were tightened before
+  any model was run, both recorded in `PLAN.md` section 8: an exact-day Wikidata match and a notability floor of 20
+  language editions. Answer-key fingerprint: `09b8fb5d6f705c0c1ea957cb4a53e52836787a6f5e8c6aca4d5e2ebb6c5f4916`.
+- **Jayden Ling** spot-checked 10 event dates against the sources (all correct) and approved the pilot.
+
+### Step 2: pilot
+- **Claude Code** wrote `src/llm.py`, `src/prompts.py`, `src/pilot.py`, `src/pilot2.py`, `src/pilot3.py`,
+  `src/pilot_report.py`, `src/make_main_lists.py` and `src/run_main.py`, and ran 906 pilot calls. The pilot showed
+  that the planned list answer format produced near-random orders, so the format was changed to numbered codes
+  (`PLAN.md` section 8). Claude Code generated the 240 main lists and wrote `PREREG.md`, which was committed before any
+  main-run call.
+- **Jayden Ling** approved the numbered list format and the main runs.
+
+### Step 3: main runs
+- **Claude Code** started the main runs at 19:05 on the Mac, wrote `src/analyze.py`, tested it on two simulated
+  models with known answers, and added pre-analysis clarifications to `PREREG.md`.
+- **Qwen3 8B (thinking off)** finished at about 20:01: 15,170 calls, no unreadable pair replies, and all 530 repeated
+  questions answered identically. Claude Code ran the pre-registered analysis on it.
+- **Llama 3.1 8B added.** Jayden Ling approved adding Llama 3.1 8B, run on his Windows PC, to test whether the Qwen3
+  results hold for a model from another developer. This was recorded in `PREREG.md` before any of its answers existed.
+- **Runs paused for a hardware comparison.** At Jayden Ling's request, Claude Code paused the Qwen3 14B and Llama runs
+  to compare the speed of the Mac and the PC with matching settings. This set the PC's Ollama to its default settings.
+- **Llama rerun.** Claude Code found that the first Llama attempt had run under two different PC configurations.
+  Jayden Ling decided to set those answers aside (`llama3.1-8b.mixed-settings.jsonl`, unused) and to rerun Llama from
+  the start on default settings. He also decided to skip the optional gpt-oss 20B setup. Both decisions were recorded
+  in the `PREREG.md` Deviations before any of the affected answers were analyzed.
+- **Llama crash and resume.** The rerun stopped at 21:24 after 13,710 of 14,280 pair questions, when the PC returned a
+  server error caused by Windows running out of local network ports. Claude Code changed `src/llm.py` to reuse one
+  connection per run and to retry server errors (tested on a simulated server; no change to the model, prompts or
+  settings). With Jayden Ling's approval the run resumed from its saved file at 21:34 and finished at 21:39: 15,170
+  calls, no duplicates, no unreadable pair replies. All 500 repeated pair questions matched; 24 of 30 repeated lists
+  matched.
+- **A trial run on the PC** of the thinking-on setup was started automatically after the crash. It failed on its first
+  list, produced no data, and was not used.
+- **Qwen3 14B (thinking off)** finished at 22:12 on the Mac: 15,170 calls, no duplicates, no unreadable pair replies,
+  and all 530 repeated questions answered identically.
+- **Qwen3 8B (thinking on), lists only.** Jayden Ling approved running this setup on the Mac. It started at 22:12, was
+  interrupted once when the host application restarted, resumed from its saved file, and finished at 01:27 on
+  October 13 (UTC): 240 lists.
+
+### Step 4: analysis
+- **Claude Code** (a separate analysis session) ran the pre-registered analysis for Llama 3.1 8B and Qwen3 14B and
+  updated the charts. Code changes, none of which alter a pre-registered rule: Llama added and gpt-oss removed in
+  `src/analyze.py` and `src/make_figures.py`; the circle-check shuffles made reproducible for the pre-registered seed
+  (this moved only Qwen3 8B's expected count, from 3,277.95 to 3,280.88); the repeat check split into pairs and lists;
+  and an exploratory script added (`src/explore_cutoff.py`).
+- **Cut-off list replies.** Claude Code identified that `PREREG.md` can be read in two ways for lists that list every
+  event and then reach the reply length limit, and that the reading changes Qwen3 8B's verdict. Jayden Ling decided,
+  after this result was known, to apply the section 5 reading already used by the analysis code, and approved the
+  wording of the Deviations entry that records the decision. Both results are reported.
+
+### Step 5: report
+- **Claude Code** analyzed the thinking-on lists, wrote `src/p6.py` for prediction P6, produced the final charts for
+  all four setups, and wrote `writeup/REPORT.md` and `README.md`.
+- **Independent check.** A separate AI helper (Claude Sonnet), given only `PREREG.md`, the event list and the raw
+  replies, wrote its own scoring code and recomputed the headline pair, circle and list numbers. All matched
+  (`verification/`).
+- **Jayden Ling** asked that all public documents use a formal tone and that private planning notes be removed.
+  Claude Code revised `README.md`, `writeup/REPORT.md`, `PLAN.md` and this log accordingly. `PREREG.md` was not
+  rewritten, because it is a dated record.
+- **Pending:** Jayden Ling's review and approval of `writeup/REPORT.md`.
