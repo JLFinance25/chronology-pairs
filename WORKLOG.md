@@ -90,3 +90,9 @@ in the repository history.
   `writeup/REPORT.md`, the header of this log and the repository description, and noted in `PLAN.md` section 8.
   `PREREG.md` was not changed, because it is a dated record.
 - **Pending:** Jayden Ling's review and approval of `writeup/REPORT.md`.
+- **Pre-publication pass.** At Jayden Ling's request to finish the study before release, Claude Code added the
+  remaining pre-registered list measures to the report (exact match, Kendall tau, the misdated share and the
+  secondary all-lists analysis), aligned the figure labels with the report's terms, cited the model license texts
+  (checked by a separate AI helper: publishing model replies without weights carries no license obligation), and added
+  `requirements.txt`. A fresh copy of the repository reproduced every result, table and figure byte for byte. No result
+  changed.
