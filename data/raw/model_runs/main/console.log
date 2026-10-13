@@ -1,0 +1,101 @@
+== started 2026-10-12T19:05:16Z
+ollama version is 0.40.3
+NAME           ID              SIZE      MODIFIED     
+gpt-oss:20b    17052f91a42e    13 GB     5 months ago    
+qwen3:14b      bdbd181c33f2    9.3 GB    5 months ago    
+qwen3:8b       500a1f067a9f    5.2 GB    6 months ago    
+-> years (120)
+-> pairs (14280)
+   1000/14280
+   2000/14280
+   3000/14280
+   4000/14280
+   5000/14280
+   6000/14280
+   7000/14280
+   8000/14280
+   9000/14280
+   10000/14280
+   11000/14280
+   12000/14280
+   13000/14280
+   14000/14280
+-> lists (240)
+   20/240
+   40/240
+   60/240
+   80/240
+   100/240
+   120/240
+   140/240
+   160/240
+   180/240
+   200/240
+   220/240
+   240/240
+-> repeats (500 pairs, 30 lists)
+Done.
+-> years (120)
+-> pairs (14280)
+   1000/14280
+== 14B run paused 2026-10-12T20:23:45Z (memory thrashing with another project's model; resumable)
+== Mac chain stopped 2026-10-12T20:42:27Z by Jayden's request (speed test Mac vs PC); resumable
+== 14B run resumed 2026-10-12T20:59:27Z (Mac alone; gpt-oss and 8b-think not queued yet)
+-> years (120)
+-> pairs (14280)
+   1000/14280
+   2000/14280
+   3000/14280
+   4000/14280
+   5000/14280
+   6000/14280
+   7000/14280
+   8000/14280
+   9000/14280
+   10000/14280
+   11000/14280
+   12000/14280
+   13000/14280
+   14000/14280
+-> lists (240)
+   20/240
+   40/240
+   60/240
+   80/240
+   100/240
+   120/240
+   140/240
+   160/240
+   180/240
+   200/240
+   220/240
+   240/240
+-> repeats (500 pairs, 30 lists)
+Done.
+== qwen3-8b-think lists started 2026-10-12T22:12:55Z by the main session (queue #7, Jayden's OK)
+-> lists (240)
+   20/240
+   40/240
+   60/240
+   80/240
+   100/240
+   120/240
+   140/240
+   160/240
+   180/240
+=== 2026-10-12 20:11:31 orchestrator restart (Jayden's OK), queue job 7: python3 src/run_main.py --config qwen3-8b-think --tasks lists ===
+-> lists (240)
+   20/240
+   40/240
+   60/240
+   80/240
+   100/240
+   120/240
+   140/240
+   160/240
+   180/240
+   200/240
+   220/240
+   240/240
+Done.
+=== 2026-10-12 21:27:33 exit code 0 ===
