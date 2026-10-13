@@ -115,3 +115,9 @@ in the repository history.
   the pre-registered labels. The Summary and `README.md` were not changed.
 - **Pending:** Jayden Ling's review of section 7, and his decision on whether the Summary and `README.md` should
   mention it.
+
+## October 13, 2026
+- **Licensing and attribution.** At Jayden Ling's instruction, Claude Code added a `LICENSE` file (MIT for code,
+  CC BY 4.0 for the report and figures, CC BY-SA 4.0 for data derived from Wikipedia) and corrected the README to state
+  that the pre-registration was drafted by the AI agent and committed before any main-run call, and that Jayden Ling
+  approved the main runs. No result changed.

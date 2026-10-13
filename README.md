@@ -89,7 +89,8 @@ script's documentation). Answers may differ slightly on other hardware.
 **Jayden Ling**
 - Selected the research question and set the core design: 120 events, one per year from 1900 to 2019, each verified
   against two sources; a fixed random-month rule for selecting events; and event wording that does not reveal dates.
-- Approved the study plan, the pre-registration, and every download and model run.
+- Approved the study plan and every download and model run. The pre-registration was drafted by the AI agent and
+  committed before any main-run call; Jayden Ling approved the main runs.
 - Decided each change made after pre-registration: adding Llama 3.1 8B as a model from a second developer,
   discarding and repeating a run made under inconsistent settings, omitting the optional gpt-oss 20B setup, and the
   scoring of replies that reached the length limit.
@@ -106,6 +107,11 @@ A dated record is kept in [`WORKLOG.md`](WORKLOG.md).
 Event information is drawn from English Wikipedia (CC BY-SA 4.0) and Wikidata (CC0); see `data/raw/SOURCES.md`.
 Models: Qwen3 (Apache 2.0) and Llama 3.1 (Llama 3.1 Community License). Related work: Wongchamcharoen, P. K., and
 Glasserman, P. (2025), "Do Large Language Models (LLMs) Understand Chronology?", https://arxiv.org/abs/2511.14214.
+
+## License
+
+Code: MIT License (see [`LICENSE`](LICENSE)). Report and figures: CC BY 4.0. Data: CC BY-SA 4.0, because several
+data files contain or adapt text from English Wikipedia. Details are in [`LICENSE`](LICENSE).
 
 ## Citation
 
