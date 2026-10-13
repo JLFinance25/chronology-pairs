@@ -48,8 +48,10 @@ All three models were run with reasoning disabled. Sources and 95% intervals are
 
 ## Setup
 
+Python 3.14 was used (3.10 or later is expected to work, but has not been tested).
+
 ```
-pip install numpy matplotlib
+pip install -r requirements.txt
 ```
 
 ## Usage

@@ -187,7 +187,7 @@ incorrect.
 
 #### 3.3 List ordering: the origin of errors (Q2)
 
-| | Length | Valid lists | Adjacent errors | B: wrong on pair | U: reversal on pair | C: list-only [interval] | List penalty per list [interval] |
+| | Length | Valid lists | Adjacent errors | B: incorrect on pair | U: reversal on pair | C: list-only [interval] | List penalty per list [interval] |
 |---|---|---|---|---|---|---|---|
 | Qwen3 8B | 5 | 100% | 168 | 20% | 61% | 19% [14 to 24] | 0.00 [-0.23 to 0.23] |
 | | 10 | 88% | 319 | 16% | 59% | 25% [21 to 30] | -0.06 [-0.34 to 0.22] |
@@ -220,9 +220,35 @@ incomplete 20-event answer omitted at least one event.
 
 ![List penalty and completeness](../figures/fig3_penalty_and_integrity.png)
 
+**Further pre-registered list measures** (`PREREG.md` sections 5 and 6). *Exact match* is the share of all lists
+ordered exactly correctly. *Kendall tau* measures agreement between a valid list and the true order, from -1
+(reversed) to 1 (identical). *Misdated* is the share of adjacent errors flagged A, meaning the model's own year
+answers place the two events in the same wrong order. The *secondary analysis* applies the same classification to all
+lists, including incomplete ones, using the first appearance of each code; its list-only shares are within 4 percentage points
+of the main analysis in every case.
+
+| | Length | Exact match | Mean Kendall tau (valid lists) | Misdated | List-only share, secondary analysis |
+|---|---|---|---|---|---|
+| Qwen3 8B | 5 | 3% | 0.16 | 19% | 19% |
+| | 10 | 0% | 0.31 | 16% | 25% |
+| | 20 | 0% | 0.33 | 12% | 29% |
+| Qwen3 14B | 5 | 7% | 0.29 | 13% | 35% |
+| | 10 | 0% | 0.40 | 9% | 47% |
+| | 20 | 0% | 0.41 | 9% | 46% |
+| Llama 3.1 8B | 5 | 3% | 0.27 | 14% | 16% |
+| | 10 | 0% | 0.36 | 11% | 20% |
+| | 20 | 0% | 0.34 | 8% | 22% |
+| Qwen3 8B, reasoning enabled | 5 | 57% | 0.80 | 60% | 18% |
+| | 10 | 26% | 0.83 | 49% | 27% |
+| | 20 | 0% | 0.86 | 52% | 26% |
+
+Source: `data/processed/results/<setup>.json` (`exact_share_of_all`, `mean_tau_valid`, `misdated_share`,
+`secondary_type_share`). With reasoning disabled, exact match fell to zero for every model at 10 and 20 events, consistent
+with the sharp decline in exact ordering with list length reported by Wongchamcharoen and Glasserman (2025).
+
 #### 3.4 Effect of reasoning (Qwen3 8B, same lists)
 
-| Length | Exactly correct, thinking off / on | Valid, off / on | Adjacent errors per valid list, off / on | List-only share, off / on (difference [interval]) | Wrong-on-pair share, off / on (difference [interval]) |
+| Length | Exactly correct, thinking off / on | Valid, off / on | Adjacent errors per valid list, off / on | List-only share, off / on (difference [interval]) | Incorrect-on-pair share, off / on (difference [interval]) |
 |---|---|---|---|---|---|
 | 5 | 3% / 57% | 100% / 100% | 1.9 / 0.5 | 19% / 18% (-1 [-13 to +12]) | 20% / 31% (+11 [-1 to +25]) |
 | 10 | 0% / 26% | 88% / 94% | 4.0 / 1.2 | 25% / 28% (+3 [-6 to +11]) | 16% / 25% (+9 [+0.4 to +18]) |
@@ -235,7 +261,7 @@ with intervals from paired resampling of the same lists (`p6_thinking.json`).
 - With thinking enabled, lists outperformed the predictions of the thinking-disabled pair answers by 1.4 (5 events),
   2.7 (10 events) and 5.3 (20 events) adjacent errors per list (intervals 1.2 to 1.5, 2.4 to 2.9 and 4.7 to 5.9).
 - **P6 was not supported.** Reasoning reduced all categories of error by broadly similar proportions, so the list-only
-  share did not fall more than the wrong-on-pair share. At 10 events the wrong-on-pair share increased.
+  share did not fall more than the incorrect-on-pair share. At 10 events the incorrect-on-pair share increased.
 - With thinking enabled, 60%, 49% and 52% of the remaining adjacent errors (5, 10 and 20 events) involved events
   whose years the model had placed in the same wrong order when asked directly, compared with 19%, 16% and 12% with
   thinking disabled.
@@ -249,7 +275,7 @@ with intervals from paired resampling of the same lists (`p6_thinking.json`).
 | P3: cycles among consistent judgments are rarer than chance | **Supported** for all three models (p < 0.001). |
 | P4: with thinking disabled, the list-only share increases with length | **Supported** for Qwen3 8B (19% to 31%, non-overlapping intervals); **partially supported** for Qwen3 14B (increase from 5 to 10 events, no change from 10 to 20); **not supported** for Llama 3.1 8B (no change). |
 | P5: incomplete lists become more frequent with length | **Supported** for every setup (valid share at 20 events: 25% to 55%). |
-| P6: reasoning reduces list-only errors more than wrong-on-pair errors | **Not supported.** |
+| P6: reasoning reduces list-only errors more than incorrect-on-pair errors | **Not supported.** |
 
 ### 4. Deviations from the pre-registration
 
@@ -311,5 +337,7 @@ See `README.md`. All results can be regenerated from the saved raw replies witho
   arXiv:2511.14214. https://arxiv.org/abs/2511.14214 (accessed October 12, 2026).
 - English Wikipedia year pages, 1900 to 2019 (CC BY-SA 4.0), and Wikidata (CC0), retrieved October 12, 2026; revision
   identifiers are recorded in `data/raw/SOURCES.md`.
-- Models: Qwen3 (Apache 2.0) and Llama 3.1 (Llama 3.1 Community License), run with Ollama 0.40.3; licenses as recorded
-  in `PREREG.md` section 3 and Deviations (accessed October 12, 2026).
+- Models: Qwen3 (Apache 2.0) and Llama 3.1 (Llama 3.1 Community License), run with Ollama 0.40.3. License texts
+  consulted on October 12, 2026: https://huggingface.co/Qwen/Qwen3-8B (license field and LICENSE file) and
+  https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/LICENSE with its Acceptable Use Policy. This
+  repository publishes model replies only, not model weights. The replies are AI-generated text.

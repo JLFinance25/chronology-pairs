@@ -16,3 +16,6 @@ HANDOFF.md
 
 # Internal working notes (superseded by writeup/REPORT.md)
 data/processed/results/NOTES-*.md
+
+# Local Claude Code settings
+.claude/

@@ -23,7 +23,7 @@ SURFACE, INK, MUTED, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
 SLOT = ["#2a78d6", "#eb6834", "#1baf7a"]
 GRAY = "#a9a8a2"
 NAMES = {"qwen3-8b-nothink": "Qwen3 8B", "qwen3-14b-nothink": "Qwen3 14B",
-         "qwen3-8b-think": "Qwen3 8B, thinking on", "llama3.1-8b": "Llama 3.1 8B"}
+         "qwen3-8b-think": "Qwen3 8B, reasoning enabled", "llama3.1-8b": "Llama 3.1 8B"}
 # gpt-oss-20b-low was skipped and llama3.1-8b added (PREREG.md Deviations, Oct 12, 2026).
 PAIR_SETUPS = ["qwen3-8b-nothink", "qwen3-14b-nothink", "llama3.1-8b"]
 LIST_SETUPS = ["qwen3-8b-nothink", "qwen3-14b-nothink", "llama3.1-8b", "qwen3-8b-think"]
@@ -68,8 +68,8 @@ def fig_date_resolution(res):
         return
     fig, axes = plt.subplots(1, 2, figsize=(10, 4), sharex=True)
     rows = []
-    for panel, (kind, title, ref) in enumerate([("stable-right", "Right both ways", 0.95),
-                                                 ("flip", "Answer flips when the order is swapped", 0.05)]):
+    for panel, (kind, title, ref) in enumerate([("stable-right", "Correct in both orders", 0.95),
+                                                 ("flip", "Reversal when the order is swapped", 0.05)]):
         ax = axes[panel]
         for s in setups:
             k = PAIR_SETUPS.index(s)  # color follows the model, not how many models have data yet
@@ -95,10 +95,10 @@ def fig_date_resolution(res):
         ax.set_xlim(-0.3, len(BANDS) - 0.7)
     axes[0].set_ylabel("Share of pairs")
     axes[0].legend(loc="lower right", fontsize=8)
-    fig.suptitle("Date resolution: how far apart events must be before answers are right and consistent",
+    fig.suptitle("Date resolution: pair accuracy and consistency by gap between events",
                  x=0.01, ha="left", fontsize=11)
     fig.text(0.01, -0.02, "Lines at 95% (left) and 5% (right) are the date-resolution thresholds. "
-             "Bars: 95% ranges from redrawing events.", fontsize=8, color=MUTED)
+             "Error bars: 95% intervals from resampling events.", fontsize=8, color=MUTED)
     fig.tight_layout()
     fig.savefig(FIGURES / "fig1_date_resolution.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
@@ -110,9 +110,9 @@ def fig_list_mistakes(res):
     setups = [s for s in LIST_SETUPS if s in res and "lists" in res[s]]
     if not setups:
         return
-    kinds = [("C", "List-only (right on the pair alone)", SLOT[0]),
-             ("B", "Wrong on the pair alone too", SLOT[1]),
-             ("U", "Unsure on the pair alone (flips)", SLOT[2]),
+    kinds = [("C", "List-only (correct on the pair alone)", SLOT[0]),
+             ("B", "Incorrect on the pair alone", SLOT[1]),
+             ("U", "Reversal on the pair alone", SLOT[2]),
              ("X", "Pair answer unreadable", GRAY)]
     fig, axes = plt.subplots(1, len(setups), figsize=(3.2 * len(setups), 4.2), sharey=True, squeeze=False)
     rows = []
@@ -135,10 +135,10 @@ def fig_list_mistakes(res):
         ax.set_title(NAMES[s], loc="left", fontsize=9)
         ax.set_xlabel("Events in the list")
         ax.set_ylim(0, 1.06)
-    axes[0][0].set_ylabel("Share of wrong neighbor pairs")
+    axes[0][0].set_ylabel("Share of adjacent errors")
     handles, labels = axes[0][0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", ncol=4, fontsize=8, bbox_to_anchor=(0.5, -0.06))
-    fig.suptitle("Where list mistakes come from: would the model also get that pair wrong on its own?",
+    fig.suptitle("Origin of list errors: classification of each adjacent error by the model's answer on that pair alone",
                  x=0.01, ha="left", fontsize=11)
     fig.tight_layout()
     fig.savefig(FIGURES / "fig2_list_mistakes.png", dpi=200, bbox_inches="tight")
@@ -176,10 +176,10 @@ def fig_penalty_and_integrity(res):
         ax.bar([str(l) for l in LENGTHS], [v or 0 for v in valid], color=SLOT[0], width=0.55)
         ax.set_ylim(0, 1)
         ax.set_xlabel("Events in the list")
-    axes[0][0].set_ylabel("List penalty\n(observed minus predicted\nwrong neighbor pairs)")
+    axes[0][0].set_ylabel("List penalty\n(observed minus predicted\nadjacent errors per list)")
     axes[1][0].set_ylabel("Share of lists with every\nevent exactly once")
-    fig.suptitle("Top: extra mistakes beyond what the model's own pair answers predict.  "
-                 "Bottom: list integrity.", x=0.01, ha="left", fontsize=11)
+    fig.suptitle("Top: adjacent errors beyond those predicted by the model's own pair answers.  "
+                 "Bottom: list completeness.", x=0.01, ha="left", fontsize=11)
     fig.tight_layout()
     fig.savefig(FIGURES / "fig3_penalty_and_integrity.png", dpi=200, bbox_inches="tight")
     plt.close(fig)
