@@ -128,3 +128,5 @@ in the repository history.
 - **Final review.** Jayden Ling confirmed that he checked the work and approved publication. At his instruction,
   Claude Code added to the report Summary and the README a statement that the exploratory re-analysis (report section
   7) weakens the pair-level account of list errors, and marked the report as checked.
+- Oct 14, 2026: Claude Code checked the project status (read-only). No study file changed; nothing run, downloaded or pushed.
+- Oct 15, 2026: Claude Code drafted outreach text in a local folder that git ignores (`writeup/drafts/`) and checked its figures against `writeup/REPORT.md`; all matched. Not yet reviewed or approved by Jayden Ling; nothing sent or published.
