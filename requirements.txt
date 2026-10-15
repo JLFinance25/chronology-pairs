@@ -1,4 +1,4 @@
 # Python 3.14 was used. Versions are those used to produce the results.
 numpy==2.4.4
 matplotlib==3.10.9
-requests==2.33.1  # only needed to rerun models or downloads
+requests==2.33.1  # imported by src/common.py, so every script needs it; also used to rerun models and downloads

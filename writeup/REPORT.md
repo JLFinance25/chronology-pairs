@@ -1,17 +1,20 @@
 # Pairwise Temporal Judgments and List Ordering in Small Language Models
 
-**Designed and directed by Jayden Ling. Code, analysis and drafting by Claude Code (an AI agent) under his direction.**
+**Directed by Jayden Ling, who chose the research question from candidate ideas, set the core design (event rules, selection and wording), approved the plan, the pre-registration and every run, and made each later decision. Code, analysis and drafting by Claude Code (an AI agent) under his direction.**
 
 Report dated October 12, 2026. Exploratory analyses (section 7) added and the report checked by Jayden Ling on
-October 13, 2026.
+October 13, 2026. Wording corrected on October 15, 2026 following a review of the study; no result,
+data or code logic changed.
 
 ---
 
 ## Summary
 
-**Question.** Language models usually identify correctly which of two events occurred first, yet they rarely place a
-long list of events in exactly the correct order. Wongchamcharoen and Glasserman (2025) documented this pattern and
-left its cause open. This study examines small models that run on consumer hardware and asks two questions. First,
+**Question.** Large language models largely preserve the local order of events, yet they rarely place a long list of
+events in exactly the correct order. Wongchamcharoen and Glasserman (2025) documented this pattern for large models and
+did not establish a cause; they describe the models as struggling to maintain a single globally consistent timeline.
+This study examines small models that run on consumer hardware. These models often do not answer "which came first?"
+reliably even for pairs of events (section 3.1). The study asks two questions. First,
 how far apart in time must two events be before a model answers "which came first?" correctly and consistently,
 giving the same answer when the order of presentation is reversed? Second, when a model orders a list, are its
 errors ones it also makes when asked about the same two events in isolation, or do they arise only within the list?
@@ -21,50 +24,68 @@ against Wikidata. Three models with reasoning ("thinking") disabled (Qwen3 8B, Q
 about all 7,140 pairs of events, each pair twice in opposite orders, and were asked for the year of each event. Each
 model also ordered the same 240 lists of 5, 10 or 20 events. Qwen3 8B with thinking enabled ordered the same 240
 lists. Every error in a list was traced to the model's own answer on the corresponding pair. The scoring rules and
-predictions were fixed in `PREREG.md` before the main data were collected.
+predictions were committed to this project's git repository in `PREREG.md` before the main data were collected (the
+only timestamps are those of the git history; there is no external registry).
 
 **Principal findings.** Ranges are 95% intervals from resampling events or lists; sources are given in section 3.
 1. **No model reached a reliable date resolution.** For events more than 25 years apart, the share of pairs answered
    correctly in both orders was 68% for Qwen3 8B (interval 60% to 75%), 86% for Qwen3 14B (80% to 91%) and 29% for
-   Llama 3.1 8B (22% to 36%), against the pre-registered threshold of 95%. Most errors were reversals: the answer
-   changed when the order of the two events was swapped. The models also favored the first option presented, which
+   Llama 3.1 8B (22% to 36%), against the pre-registered threshold of 95%. For Qwen3 8B and Llama 3.1 8B at every
+   gap, and for Qwen3 14B at gaps above 10 years, most errors were reversals: the answer changed when the order of the
+   two events was swapped (`pairs_by_gap.csv`). For Qwen3 14B at gaps up to 10 years, answers that were wrong in both
+   orders were about as frequent as reversals or more frequent. The models also favored the first option presented, which
    was chosen in 69% (Qwen3 8B), 54% (Qwen3 14B) and 79% (Llama 3.1 8B) of answers.
 2. **Consistent answers form a single timeline.** Among sets of three events for which all three pairs received
    consistent answers, cyclic judgments (A before B, B before C, C before A) were almost absent: 14 cycles against
    about 3,281 expected under random placement of the same errors (Qwen3 8B), 140 against about 12,424 (Qwen3 14B),
    and 30 against about 6,015 (Llama 3.1 8B). The inconsistency lies in order-dependent reversals, not in cycles.
-3. **Most list errors are already present at the pair level.** Among adjacent events placed in the wrong order, the
-   share that the model had answered correctly in both orders when asked about the pair alone ("list-only" errors)
-   was 19% to 31% for Qwen3 8B, 16% to 20% for Llama 3.1 8B and 35% to 47% for Qwen3 14B, depending on list length.
-   Under the pre-registered decision rules, Qwen3 8B shows "a real long-list penalty" (0.80 more adjacent errors per
-   20-event list than its pair answers predict, interval 0.33 to 1.28). This verdict depends on how replies that
-   reached the length limit are scored (section 4); under the alternative reading it is "in between". Qwen3 14B and Llama 3.1 8B are classified "in between". An exploratory
-   re-analysis that removes the models' preference for the first option (section 7) weakens this pair-level account:
-   about half of adjacent list errors (40% to 53%) then coincide with an incorrect pair judgment. Separately, long lists were frequently incomplete: only 25% (Qwen3 8B),
+3. **Origin of list errors: pre-registered verdicts differ by model.** Under the pre-registered decision rules,
+   Qwen3 8B shows "a real long-list penalty" (0.80 more adjacent errors per 20-event list than its pair answers
+   predict, interval 0.33 to 1.28). This verdict depends on how replies that reached the length limit are scored
+   (section 4) and on random tie-breaking in the prediction (section 3.3); under the alternative scoring reading it is
+   "in between". Qwen3 14B, Llama 3.1 8B and Qwen3 8B with thinking enabled are classified "in between". Among adjacent
+   events placed in the wrong order, the share that the model had answered correctly in both orders when asked about
+   the pair alone ("list-only" errors) was 19% to 31% for Qwen3 8B, 16% to 20% for Llama 3.1 8B and 35% to 47% for
+   Qwen3 14B, depending on list length; the remaining errors fell on pairs the model had also answered incorrectly or
+   inconsistently. Because such pairs are common among close events (section 3.1), this does not by itself show that
+   list errors arise from pair errors. An exploratory re-analysis that removes the models' preference for the first
+   option (section 7) weakens the pair-level account: about half of adjacent list errors (40% to 53%) then coincide
+   with an incorrect pair judgment. Separately, long lists were frequently incomplete: only 25% (Qwen3 8B),
    50% (Qwen3 14B) and 28% (Llama 3.1 8B) of 20-event answers contained every event exactly once.
-4. **Reasoning improves list ordering substantially, but not chiefly by removing list-only errors.** With thinking
-   enabled, Qwen3 8B ordered 57% of 5-event lists exactly (3% with thinking disabled) and made 5.3 fewer adjacent
-   errors per 20-event list than its thinking-disabled pair answers predict (interval 4.7 to 5.9). The prediction
-   that reasoning would reduce list-only errors more than other errors (P6) was not supported: the list-only share
-   changed little (31% to 24% at 20 events; difference -7 percentage points, interval -16 to +2). With thinking
-   enabled, 52% of the remaining adjacent errors at 20 events involved events whose years the model had placed in the
-   same wrong order when asked directly, compared with 12% with thinking disabled.
+4. **Reasoning improves list ordering substantially; whether it specifically removes list-only errors was not
+   established.** With thinking enabled (using the model card's recommended settings, which also changed the sampling
+   temperature, context size and reply length limit; section 5), Qwen3 8B ordered 57% of 5-event lists exactly (3% with
+   thinking disabled) and made 5.3 fewer adjacent errors per 20-event list than its thinking-disabled pair answers
+   predict (interval 4.7 to 5.9). The prediction that reasoning would reduce list-only errors more than other errors
+   (P6) was not established. At every list length the list-only share fell more, or rose less, than the
+   incorrect-on-pair share, the direction P6 predicted (section 3.4). The pre-registration set no test for P6, and the
+   change in the list-only share alone is not distinguishable from zero at any length (31% to 24% at 20 events;
+   difference -7 percentage points, interval -16 to +2). With thinking enabled, 52% of the remaining adjacent errors at
+   20 events involved events whose years the model had placed in the same wrong order when asked directly, compared
+   with 12% with thinking disabled.
 
-**Interpretation.** For these small models, the failure to order long lists is largely not a new phenomenon that
-emerges with length. Under the pre-registered measures, it mostly reflects the same uncertainty observed on single
-pairs, chiefly answers that depend on the order of presentation, together with a separate tendency to omit events
-from long lists. An exploratory re-analysis qualifies this: most order-dependent answers reflect a preference for
-the first option presented rather than an absence of judgment, and once that preference is removed, list errors and
-pair errors overlap only in part (section 7). Reasoning reduces
-errors considerably, and the errors that remain are more often attributable to incorrect knowledge of dates. For
-practitioners using small models to order events, the results suggest that, without reasoning, the relative order
-of events less than about 25 years apart should not be relied upon, and that outputs should be checked for omitted
-items.
+**Interpretation.** For these small models, the pre-registered verdicts on the origin of list errors are mixed: a
+long-list penalty for Qwen3 8B (a tentative verdict; section 3.3) and "in between" for the other setups. At 5 and 10
+events, Qwen3 8B's list errors were about as frequent as its pair answers predict (the penalty intervals include
+zero), with some sign of extra errors at 20 events. Qwen3 14B showed extra errors at 10 events but not at 20, and Llama
+3.1 8B's lists contained fewer adjacent errors than its pair answers predict at 5 and 10 events. Most adjacent list
+errors fell on pairs that the model had also answered incorrectly or inconsistently (for Qwen3 8B and Llama 3.1 8B,
+chiefly answers that depended on the order of presentation), but such pairs are common among close events, so this does
+not show that list errors arise from pair errors. Long lists also frequently omitted events. An exploratory
+re-analysis qualifies the pair-level account: for the Qwen3 models, most order-dependent answers reflect a preference
+for the first option presented rather than an absence of judgment (for Llama 3.1 8B, few reversals are clearly decided;
+section 7.1), and once that preference is removed, list errors and pair errors overlap only in part (section 7).
+Reasoning reduces errors considerably, and the errors that remain are more often attributable to incorrect knowledge
+of dates. For practitioners using small models to order events, the results suggest that, without reasoning, none of
+the gaps tested was reliable: reliability was lowest for events less than about 25 years apart, and even beyond 25
+years only 68% (Qwen3 8B), 86% (Qwen3 14B) and 29% (Llama 3.1 8B) of pairs were answered correctly in both orders.
+Outputs should also be checked for omitted items.
 
 **Limitations.** Four model setups and 120 events from a single period (1900 to 2019). Llama 3.1 8B was run on
 different hardware (a Windows PC) from the Qwen3 models (a Mac). The 20-event results rest on 15 to 33 complete lists
-per setup. One verdict depends on a scoring decision made after results were seen; both outcomes are reported. The
-event descriptions were written by an AI system. Details are given in section 5.
+per setup. One verdict depends on a scoring decision made after results were seen and on random tie-breaking; both scoring
+outcomes are reported. The comparison with reasoning enabled also changed sampling settings. The event descriptions
+were written by an AI system. Details are given in section 5.
 
 ---
 
@@ -137,7 +158,7 @@ stable-wrong answers within each gap band.
 **Code.** `src/analyze.py` (all pre-registered results), `src/p6.py` (prediction P6), `src/make_figures.py` (figures)
 and `src/explore_cutoff.py` (an exploratory comparison, section 4). The code was written by the AI agent. The analysis
 code was tested on two simulated models with known answers before any main data were examined (`PREREG.md`
-Deviations, clarification 4).
+Deviations, clarification 4); that test code was not kept, so this check cannot be rerun from the repository.
 
 **Independent verification.** A separate AI system (Claude Sonnet), given only `PREREG.md`, the event list and the raw
 replies, and without access to the analysis code or results, implemented its own scoring and recomputed the pair
@@ -173,7 +194,8 @@ Share of pairs answered correctly in both orders, by gap between the two events 
   in both orders with at most 5% reversals.
 - **Preference for the first option.** Share of all pair answers that were "A": Qwen3 8B 69%, Qwen3 14B 54%,
   Llama 3.1 8B 79%.
-- **Year questions.** Exact years given, out of 120: Qwen3 8B 87, Qwen3 14B 102, Llama 3.1 8B 97.
+- **Year questions.** Exact years given, out of 120: Qwen3 8B 87, Qwen3 14B 102, Llama 3.1 8B 97. Year answers that
+  could not be read: 0, 1 and 3 respectively (`year_check` in the results files).
 - All pair replies from all models were readable (0 unreadable out of 14,280 per model).
 
 #### 3.2 Cycles among consistent judgments
@@ -186,7 +208,7 @@ Sets of three events for which all three pairs received consistent answers, and 
 | Qwen3 14B | 188,198 | 140 | 12,424 (11,931 to 12,961) |
 | Llama 3.1 8B | 27,761 | 30 | 6,015 (5,829 to 6,199) |
 
-For every model, none of the 1,000 reassignments came as close to the observed count (p < 0.001). Where these models
+For every model, none of the 1,000 reassignments came as close to the observed count (p ≤ 0.001). Where these models
 give consistent answers, those answers are compatible with a single ordering of events, even where that ordering is
 incorrect.
 
@@ -212,16 +234,41 @@ list-only errors rise with length to at least 50% at 20 events, or if the penalt
 zero; and "in between" otherwise.
 - **Qwen3 8B: a real long-list penalty**, through the penalty at 20 events (+0.80, interval 0.33 to 1.28). The
   list-only share rose (19% to 31%) but remained below 50%. **This verdict depends on a scoring decision** (section 4):
-  if the 16 lists that listed every event and then reached the reply length limit are treated as unreadable, the
-  verdict is "in between" (penalty +0.50, interval 0.00 to 1.00, based on 6 valid 20-event lists).
+  if the 16 lists that listed every event and then reached the reply length limit (1, 6 and 9 lists at 5, 10 and 20
+  events; `verification/independent_check.md`) are treated as unreadable, the verdict is "in between" (penalty +0.50,
+  interval 0.00 to 1.00, based on 6 valid 20-event lists). **Exploratory caveat (not pre-registered):** the predicted
+  error count behind the penalty breaks ties between events with equal win counts at random (pre-registered seed), and
+  the 20-event result rests on only 15 valid lists, so this verdict should be treated as tentative.
 - **Qwen3 14B: in between.** List-only errors were common (35% to 47%) and reached 47% at 20 events, just below the 50%
   threshold. The penalty was above zero at 10 events (+0.42) but not at 20 events, the length used by the rule.
 - **Llama 3.1 8B: in between.** List-only errors remained below 20% at every length (19.9% at 10 events), but the
   penalty was *below* zero at 5 and 10 events: its lists contained fewer adjacent errors than its pair answers predict.
+- **Qwen3 8B with thinking enabled: in between** (`q2_decision` in `qwen3-8b-think.json`; lists classified with the
+  thinking-disabled pair answers). List-only errors were 18% to 28% (above the 20% limit for "mostly in the pairs" at
+  10 and 20 events) and did not reach 50%, and the penalty at 20 events was below zero (-5.3, interval -5.9 to -4.7).
 
 **Omitted events.** Long lists were often incomplete before any ordering error arose. Share of 20-event answers
 listing every event exactly once: Qwen3 8B 25%, Qwen3 14B 50%, Llama 3.1 8B 28% (`lists_by_length.csv`). Every
 incomplete 20-event answer omitted at least one event.
+
+Why lists were invalid (`PREREG.md` section 5 requires these counts; a list can have several problems, and counts are
+numbers of lists out of 90 at 5 and 10 events and 60 at 20 events). Source: `verification/independent_check.md`,
+which was computed from the raw replies by a separately written program.
+
+| Setup | Length | Invalid lists | Fewer than N numbered entries | With a missing code | With a repeated code | With an invented or unreadable entry |
+|---|---|---|---|---|---|---|
+| Qwen3 8B | 5 | 0 | 0 | 0 | 0 | 0 |
+| | 10 | 11 | 2 | 11 | 9 | 0 |
+| | 20 | 45 | 2 | 45 | 40 | 6 |
+| Qwen3 14B | 5 | 0 | 0 | 0 | 0 | 0 |
+| | 10 | 5 | 4 | 5 | 1 | 0 |
+| | 20 | 30 | 21 | 30 | 6 | 4 |
+| Llama 3.1 8B | 5 | 0 | 0 | 0 | 0 | 0 |
+| | 10 | 5 | 4 | 5 | 1 | 1 |
+| | 20 | 43 | 42 | 43 | 5 | 2 |
+| Qwen3 8B, thinking enabled | 5 | 0 | 0 | 0 | 0 | 0 |
+| | 10 | 5 | 5 | 5 | 0 | 0 |
+| | 20 | 27 | 27 | 27 | 0 | 0 |
 
 ![List penalty and completeness](../figures/fig3_penalty_and_integrity.png)
 
@@ -265,8 +312,10 @@ with intervals from paired resampling of the same lists (`p6_thinking.json`).
 
 - With thinking enabled, lists outperformed the predictions of the thinking-disabled pair answers by 1.4 (5 events),
   2.7 (10 events) and 5.3 (20 events) adjacent errors per list (intervals 1.2 to 1.5, 2.4 to 2.9 and 4.7 to 5.9).
-- **P6 was not supported.** Reasoning reduced all categories of error by broadly similar proportions, so the list-only
-  share did not fall more than the incorrect-on-pair share. At 10 events the incorrect-on-pair share increased.
+- **P6 was not established.** At every list length the list-only share fell more, or rose less, than the
+  incorrect-on-pair share (differences in the table above), the direction P6 predicted. The pre-registration set no
+  decision rule for P6, and the change in the list-only share alone is not distinguishable from zero at any length
+  (its interval includes zero). At 10 events the incorrect-on-pair share increased (interval above zero).
 - With thinking enabled, 60%, 49% and 52% of the remaining adjacent errors (5, 10 and 20 events) involved events
   whose years the model had placed in the same wrong order when asked directly, compared with 19%, 16% and 12% with
   thinking disabled.
@@ -277,16 +326,19 @@ with intervals from paired resampling of the same lists (`p6_thinking.json`).
 |---|---|
 | P1: for Qwen3 8B, correct-in-both-orders rises with the gap, and reversals are most frequent at 1 to 2 years | **Largely supported.** The share rises in every band (18% to 68%). Reversals are highest at 1 and 2 years (66%, 63%), but the intervals up to 25 years overlap; the only clear decline occurs beyond 25 years. |
 | P2: Qwen3 14B outperforms Qwen3 8B in every gap band | **Supported** in all six bands; the intervals overlap at 1 year and marginally at 2 years. |
-| P3: cycles among consistent judgments are rarer than chance | **Supported** for all three models (p < 0.001). |
-| P4: with thinking disabled, the list-only share increases with length | **Supported** for Qwen3 8B (19% to 31%, non-overlapping intervals); **partially supported** for Qwen3 14B (increase from 5 to 10 events, no change from 10 to 20); **not supported** for Llama 3.1 8B (no change). |
+| P3: cycles among consistent judgments are rarer than chance | **Supported** for all three models (p ≤ 0.001; 0 of 1,000 reassignments as close to the observed count). |
+| P4: with thinking disabled, the list-only share increases with length | **Supported** for Qwen3 8B (19% at 5 events to 31% at 20, non-overlapping intervals); **supported** for Qwen3 14B (35% [28 to 41] at 5 events to 47% [42 to 52] at 20, non-overlapping intervals; flat from 10 to 20 events); **not supported** for Llama 3.1 8B by the same interval criterion (16% [9 to 23] at 5 events, 18% [14 to 24] at 20; the intervals overlap, although the point estimate at 20 events is higher than at 5, which is all that clarification 1 in `PREREG.md` literally requires). |
 | P5: incomplete lists become more frequent with length | **Supported** for every setup (valid share at 20 events: 25% to 55%). |
-| P6: reasoning reduces list-only errors more than incorrect-on-pair errors | **Not supported.** |
+| P6: reasoning reduces list-only errors more than incorrect-on-pair errors | **Not established.** The direction matches P6 at every length, but the pre-registration set no test and the list-only change alone is not distinguishable from zero (section 3.4). |
 
 ### 4. Deviations from the pre-registration
 
 All changes made after `PREREG.md` was committed are dated in its Deviations section. In summary:
-1. **Llama 3.1 8B was added** before any of its answers existed, run on a Windows PC, to test whether the Qwen3
-   results generalize to a model from another developer.
+1. **Llama 3.1 8B was added**, run on a Windows PC, to test whether the Qwen3 results, in particular the preference
+   for the first option, generalize to a model from another developer. It was added after Qwen3 8B's results had been
+   seen and before any Llama answers were analyzed. The decision is dated 20:07 UTC on October 12, 2026 in `PREREG.md`
+   and preceded the first Llama answers (20:18 UTC, `data/raw/model_runs/main/console_pc.log`), but it was committed to
+   the repository at 21:17 UTC (commit b096739).
 2. **The Llama run was repeated.** The first attempt ran partly under non-default PC settings (a compressed memory
    cache and a different attention implementation) and partly under default settings. Those answers were set aside
    unused, and the run was repeated from the start under default settings. The repeated run stopped once, at 13,710
@@ -304,6 +356,10 @@ All changes made after `PREREG.md` was committed are dated in its Deviations sec
 6. **Repeatability.** For both Qwen3 models, all 530 repeated questions received identical answers. For Llama 3.1 8B,
    all 500 repeated pair questions matched, but only 24 of 30 repeated lists did; all differing lists had 20 events.
    The cause is unknown. The analysis scores the first answer, as planned.
+7. **A misattribution in `PREREG.md` section 1.** It states that "small AI models usually answer" the pair question
+   correctly, citing Wongchamcharoen and Glasserman (2025). That paper evaluated large models (GPT-4.1, Claude 3.7
+   Sonnet and GPT-5; arXiv abstract, accessed October 15, 2026), so "small" was misattributed to it. `PREREG.md` is
+   unchanged.
 
 ### 5. Limitations
 
@@ -313,7 +369,16 @@ All changes made after `PREREG.md` was committed are dated in its Deviations sec
   default settings. Differences between Llama and Qwen3 may partly reflect hardware.
 - **Sample size for long lists.** The 20-event results rest on 15 (Qwen3 8B), 30 (Qwen3 14B), 17 (Llama 3.1 8B) and 33
   (thinking enabled) valid lists, and list intervals may be too narrow because lists share events.
-- **A verdict that depends on a post hoc scoring decision** (section 4, item 4).
+- **A verdict that depends on a post hoc scoring decision** (section 4, item 4) **and on random tie-breaking** in the
+  prediction (section 3.3, exploratory caveat). It rests on 15 valid 20-event lists and should be treated as
+  tentative.
+- **The reasoning comparison changed more than reasoning.** The thinking-enabled run used temperature 0.6, a context
+  size of 20,480 and a reply limit of 16,384 tokens, whereas the thinking-disabled runs used temperature 0, a context
+  size of 4,096 and a 400-token reply limit for lists (`options` fields in the raw replies; the thinking-enabled
+  settings are the model card's recommended ones). The 400-token limit is what cut off some thinking-disabled Qwen3 8B
+  lists. The thinking-enabled run is a single sample at temperature 0.6 with no repeat check (`repeat_check` in
+  `qwen3-8b-think.json` is empty), so its run-to-run variation is unknown. Differences between the two setups cannot
+  be attributed to reasoning alone.
 - **Event descriptions were written by an AI system** (Claude), with an automatic check for numbers and ordering words
   and a manual check of 10 dates.
 - **Dependence of the list-only share on pair accuracy.** A model that answers more pairs correctly has more
@@ -478,12 +543,13 @@ Source: `lists_by_length` in the results files (`list_correct_share_all_pairs`,
   more than 25 years apart, from 68% to 90% for Qwen3 8B and from 29% to 64% for Llama 3.1 8B), but no model reaches
   95%, so the conclusion that no model reached a reliable date resolution holds under this measure as well. Most
   reversals by the Qwen3 models reflect the preference for the first option rather than an absence of judgment.
-- **Q2.** The conclusion that most list errors are already present at the pair level (Summary and section 3.3) rests
+- **Q2.** The account that list errors are already present at the pair level (Summary and section 3.3) rests
   on counting every reversal as a pair-level error. Once the first-option preference is removed, about half of
   adjacent list errors (40% to 53%) coincide with an incorrect pair judgment, and the remainder occur on pairs that the
   model judges correctly. For the Qwen3 models, the number of list errors remains close to what the debiased pair
-  judgments predict, so lists are not clearly worse than the pair judgments; rather, list errors and pair errors
-  overlap only in part. These results weaken the pair-level account of list errors as stated in the Summary. They are
+  judgments predict, so lists are not clearly worse than the pair judgments, with one exception: Qwen3 14B at 10 events
+  has a debiased list penalty of +0.46 [+0.17 to +0.77] (section 7.2). List errors and pair errors overlap only in
+  part. These results weaken the pair-level account of list errors described in the Summary and section 3.3. They are
   exploratory and do not change the pre-registered verdicts.
 - **Limitations specific to these analyses.** The adjustment assumes that the preference for the first position acts
   equally in both orders. It relies on probabilities that the models compute but do not give as answers, and for the

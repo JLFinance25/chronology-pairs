@@ -45,5 +45,7 @@ All downloads below were approved by Jayden on Oct 12, 2026, and made by scripts
 - Wikimedia User-Agent policy: https://foundation.wikimedia.org/wiki/Policy:Wikimedia_Foundation_User-Agent_Policy. It asks scripts to identify themselves and give contact info. We send a descriptive name without personal contact details. Nothing was blocked.
 - MediaWiki API etiquette: https://www.mediawiki.org/wiki/API:Etiquette
 
-## Not yet downloaded
-- Model files: none needed so far. `qwen3:8b`, `qwen3:14b` and `gpt-oss:20b` were already on this Mac before the project started. Their licenses are UNVERIFIED until read before the pilot.
+## Model files
+- `qwen3:8b`, `qwen3:14b` and `gpt-oss:20b` were already on this Mac before the project started; nothing was downloaded for them. Their Ollama IDs were recorded by `ollama list` at the start of the main runs (`data/raw/model_runs/main/console.log`). `gpt-oss:20b` was not used in the main study.
+- `llama3.1:8b` was used on Jayden's Windows PC (added Oct 12, 2026; `PREREG.md` Deviations). Whether it was already on the PC or downloaded for this study is not recorded: UNVERIFIED. Its Ollama ID (`46e0c10c039e`, as stated in `PREREG.md`) does not appear in any saved log: UNVERIFIED.
+- Licenses, checked Oct 12, 2026 (`writeup/REPORT.md` section 9): Qwen3 is Apache 2.0 (https://huggingface.co/Qwen/Qwen3-8B); Llama 3.1 is under the Llama 3.1 Community License (https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/LICENSE). This repository contains model replies only, not model files.

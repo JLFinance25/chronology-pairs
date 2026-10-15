@@ -358,7 +358,7 @@ def main():
         r = results[s]
         emit("| %s | %d | %d | %.3f%% |" % (s, r["tot"], r["circ"], 100.0 * r["circ"] / r["tot"]))
     emit("")
-    emit("(Shuffle baseline skipped, as asked. 120 events give 273,280 triples in total.)")
+    emit("(Shuffle baseline skipped, as asked. 120 events give 280,840 triples in total.)")
     emit("")
     emit("## 3. Lists")
     emit("")

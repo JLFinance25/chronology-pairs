@@ -37,7 +37,7 @@ All six gap bands (extra, for reference):
 | qwen3-14b-nothink | 188198 | 140 | 0.074% |
 | llama3.1-8b | 27761 | 30 | 0.108% |
 
-(Shuffle baseline skipped, as asked. 120 events give 273,280 triples in total.)
+(Shuffle baseline skipped, as asked. 120 events give 280,840 triples in total.)
 
 ## 3. Lists
 
