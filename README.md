@@ -1,20 +1,41 @@
 # Pairwise Temporal Judgments and List Ordering in Small Language Models
 
-**Jayden Ling** · [Report](writeup/REPORT.md) · [Pre-registration](PREREG.md) · [Data](data/) · [Code](src/)
+Small language models often cannot say reliably which of two events came first. I test whether their mistakes on long
+lists of events are already there in their answers about pairs, or only appear once lists get long.
 
-Directed by Jayden Ling, who chose the research question from candidate ideas, set the core design (event rules,
-selection and wording), approved the plan, the pre-registration and every run, and made each later decision. Code,
-analysis and drafting by Claude Code (an AI agent) under his direction. See [Contributions](#contributions).
+**Status: results final; not peer-reviewed.** [Report](writeup/REPORT.md) · [Pre-registration](PREREG.md) · [Data](data/) · [Code](src/)
+
+## Question
 
 Large language models largely preserve the local order of events, yet they rarely place a long list of events in
-exactly the correct order (Wongchamcharoen and Glasserman, 2025). This study examines small models that run on consumer
-hardware. It finds that these models often do not answer "which came first?" reliably even for pairs of events, and
-asks whether their errors on long lists are already present in their judgments about pairs of events, or arise only when
+exactly the correct order (Wongchamcharoen and Glasserman, 2025). I study small models that run on consumer
+hardware. I found that these models often do not answer "which came first?" reliably even for pairs of events. I ask
+whether their errors on long lists are already present in their judgments about pairs of events, or arise only when
 lists become long.
 
 ![Date resolution](figures/fig1_date_resolution.png)
 
-## Principal results
+## What I did
+
+- **Data.** 120 historical events, one per year from 1900 to 2019, drawn from Wikipedia and verified against
+  Wikidata. I chose the selection rules: a fixed random-month rule for picking events, and event wording that does not
+  reveal dates. The short event descriptions shown to the models were written by an AI system and checked against the
+  sources.
+- **Models.** Four setups: Qwen3 8B, Qwen3 14B and Llama 3.1 8B with reasoning disabled, and Qwen3 8B with reasoning
+  enabled. I added Llama 3.1 8B so that the Qwen3 results could be tested on a model from a second developer.
+- **Design.** Each pair of events was presented twice, once in each order (14,280 questions per model), and each
+  model ordered the same 240 lists of 5, 10 or 20 events. Every error in a list is traced to the model's own answer
+  on the corresponding pair.
+- **Pre-registration.** The hypotheses, prompts and decision rules were committed to this project's git repository
+  in [`PREREG.md`](PREREG.md) before the main data were collected (the only timestamps are those of the git history;
+  there is no external registry). All later changes are dated in its Deviations section. The pre-registration's
+  opening sentence attributes "small" models to the 2025 paper in error (report, section 4).
+- **Scoring.** Answers are scored against verified dates by deterministic code; no AI system grades another's
+  answers. A second, separately written scoring program (another AI model, given the pre-registration and the raw
+  replies) reproduced the pair shares, first-option rates, cycle counts and list composition (`verification/`). It
+  did not recompute intervals, the list penalty or any verdict.
+
+## Results
 
 | | Qwen3 8B | Qwen3 14B | Llama 3.1 8B |
 |---|---|---|---|
@@ -46,34 +67,28 @@ are given in [`writeup/REPORT.md`](writeup/REPORT.md), section 3.
   only within lists was not established: the direction matched at every list length, but the pre-registration set no
   test and the change in the list-only share alone is not distinguishable from zero.
 
-## Overview
+## Limitations and deviations from the plan
 
-- **Data.** 120 historical events, one per year from 1900 to 2019, drawn from Wikipedia and verified against
-  Wikidata. The short event descriptions shown to the models were written by an AI system and checked against the
-  sources.
-- **Models.** Four setups: Qwen3 8B, Qwen3 14B and Llama 3.1 8B with reasoning disabled, and Qwen3 8B with reasoning
-  enabled.
-- **Design.** Each pair of events was presented twice, once in each order (14,280 questions per model), and each
-  model ordered the same 240 lists of 5, 10 or 20 events. Every error in a list is traced to the model's own answer
-  on the corresponding pair.
-- **Pre-registration.** The hypotheses, prompts and decision rules were committed to this project's git repository
-  in [`PREREG.md`](PREREG.md) before the main data were collected (the only timestamps are those of the git history;
-  there is no external registry). All later changes are dated in its Deviations section. The pre-registration's
-  opening sentence attributes "small" models to the 2025 paper in error (report, section 4).
-- **Scoring.** Answers are scored against verified dates by deterministic code; no AI system grades another's
-  answers. A second, separately written scoring program (another AI model, given the pre-registration and the raw
-  replies) reproduced the pair shares, first-option rates, cycle counts and list composition (`verification/`). It
-  did not recompute intervals, the list penalty or any verdict.
+- After pre-registration I made these changes, each dated in the Deviations section of [`PREREG.md`](PREREG.md):
+  adding Llama 3.1 8B as a model from a second developer; discarding and repeating a run made under inconsistent
+  settings; omitting the optional gpt-oss 20B setup; and the scoring of replies that reached the length limit. I
+  decided the scoring of length-limit replies after seeing the result, and both readings are reported.
+- The Qwen3 8B verdict is tentative, for the reasons given under Results.
+- The first-option preference confounds the "reversal" category. The exploratory re-analysis that addresses this
+  (report, section 7) was not pre-registered.
+- The pre-registration was drafted with AI help and committed before any main-run call. Its timestamps come only from
+  the git history. Private planning notes were later removed from selected earlier commits, and some older commits
+  still contain minor internal working notes. `verification/commit_id_map.csv` maps the original commit identifiers
+  to the current ones.
+- The second scoring program covers the pair shares, first-option rates, cycle counts and list composition only.
 
-## Setup
+## Reproduce it
 
 The results were produced with Python 3.14.
 
 ```
 pip install -r requirements.txt
 ```
-
-## Usage
 
 The raw model replies are included, so every result and figure can be regenerated without running a model:
 
@@ -91,7 +106,7 @@ Rerunning the models requires [Ollama](https://ollama.com) 0.40.3 with `qwen3:8b
 (model identifiers are listed in `PREREG.md`), followed by `python3 src/run_main.py --config <setup>` (see the
 script's documentation). Answers may differ slightly on other hardware.
 
-## Repository contents
+### Repository contents
 
 | Path | Contents |
 |---|---|
@@ -104,33 +119,13 @@ script's documentation). Answers may differ slightly on other hardware.
 | `figures/` | Figures |
 | `src/` | All code |
 | `verification/` | Separately written recomputation of the pair shares, cycle counts and list composition |
-| `WORKLOG.md` | Record of contributions by date |
+| `WORKLOG.md` | Dated record of who did what |
 
-## Contributions
-
-**Jayden Ling**
-- Chose the research question from candidate ideas and set the core design: 120 events, one per year from 1900 to 2019, each verified
-  against two sources; a fixed random-month rule for selecting events; and event wording that does not reveal dates.
-- Approved the study plan and every download and model run. The pre-registration was drafted by the AI agent and
-  committed before any main-run call; Jayden Ling approved the main runs.
-- Decided each change made after pre-registration: adding Llama 3.1 8B as a model from a second developer,
-  discarding and repeating a run made under inconsistent settings, omitting the optional gpt-oss 20B setup, and the
-  scoring of replies that reached the length limit.
-- Checked 10 event dates against the sources.
-
-**AI agent, under Jayden Ling's direction**
-- Wrote the code, ran the models, carried out the analysis, and drafted the plan, pre-registration, report and this
-  README.
-
-A dated record is kept in [`WORKLOG.md`](WORKLOG.md).
-
-## Sources and licenses
+## Data and licenses
 
 Event information is drawn from English Wikipedia (CC BY-SA 4.0) and Wikidata (CC0); see `data/raw/SOURCES.md`.
 Models: Qwen3 (Apache 2.0) and Llama 3.1 (Llama 3.1 Community License). Related work: Wongchamcharoen, P. K., and
 Glasserman, P. (2025), "Do Large Language Models (LLMs) Understand Chronology?", https://arxiv.org/abs/2511.14214.
-
-## License
 
 Code: MIT License (see [`LICENSE`](LICENSE)). Report and figures: CC BY 4.0. Data: CC BY-SA 4.0, because several
 data files contain or adapt text from English Wikipedia. Details are in [`LICENSE`](LICENSE).
@@ -143,6 +138,16 @@ data files contain or adapt text from English Wikipedia. Details are in [`LICENS
   title        = {Pairwise Temporal Judgments and List Ordering in Small Language Models},
   year         = {2026},
   howpublished = {\url{https://github.com/JLFinance25/chronology-pairs}},
-  note         = {Code, analysis and drafting by an AI agent; see the repository README}
+  note         = {See the Acknowledgments and AI use section of the repository README}
 }
 ```
+
+## Acknowledgments and AI use
+
+I chose the research question from candidate ideas and set the core design: the 120 events, the random-month rule, and
+wording that does not reveal dates. I approved the study plan, every download and every model run, and I decided each
+change made after pre-registration (listed above). I spot-checked 10 event dates against the sources (all correct).
+Claude (Anthropic's AI assistant) wrote the code, ran the models and drafted the plan, pre-registration, report and
+this text under my direction. On Oct 13, 2026 I confirmed that I had checked the work and approved publication, and on
+Oct 15, 2026 I approved the wording corrections to this README and the report. The numbers were checked against the result files by Claude and by a separate AI helper, not
+re-audited line by line by me. A dated record is kept in [`WORKLOG.md`](WORKLOG.md).
