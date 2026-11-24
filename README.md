@@ -151,3 +151,7 @@ Claude (Anthropic's AI assistant) wrote the code, ran the models and drafted the
 this text under my direction. On Oct 13, 2026 I confirmed that I had checked the work and approved publication, and on
 Oct 15, 2026 I approved the wording corrections to this README and the report. The numbers were checked against the result files by Claude and by a separate AI helper, not
 re-audited line by line by me. A dated record is kept in [`WORKLOG.md`](WORKLOG.md).
+
+## Related papers
+
+More pre-registered studies by Jayden Ling are on Zenodo: [all papers](https://zenodo.org/search?q=creators.name%3A%22Ling%2C%20Jayden%22). Flagship: *When do operations-research models beat simple baselines on public data? 38 pre-specified tests*, [doi:10.5281/zenodo.24280952](https://doi.org/10.5281/zenodo.24280952). This repo has no Zenodo record of its own yet. Sibling repos: [number-guard](https://github.com/JLFinance25/number-guard), [phantom-answers](https://github.com/JLFinance25/phantom-answers), [date-label-leak](https://github.com/JLFinance25/date-label-leak), [february-cliff](https://github.com/JLFinance25/february-cliff), [chronology-pairs](https://github.com/JLFinance25/chronology-pairs).
